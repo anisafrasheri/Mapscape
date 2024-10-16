@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Map with Tree Markers and Address List</title>
+    <script>
+        let map;
+        let geocoder;
+        let addressList = [];
+        let addressListDiv;
+
+        function initMap() {
+            const initialLatLng = { lat: -33.9, lng: 151.2 };
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: initialLatLng,
+            });
+
+            geocoder = new google.maps.Geocoder();
+
+            // Create address list container
+            addressListDiv = document.createElement("div");
+            addressListDiv.id = "address-list";
+            document.body.appendChild(addressListDiv);
+
+            // Add click listener to add tree markers
+            map.addListener("click", (event) => {
+                addTreeMarker(event.latLng);
+                geocode(event.latLng);
+            });
+        }
+
+        function addTreeMarker(location) {
+            new google.maps.Marker({
+                position: location,
+                map: map,
+                title: "Tree",
+                icon: {
+                    url: "https://img.icons8.com/color/48/deciduous-tree.png", // Tree icon URL
+                    scaledSize: new google.maps.Size(30, 30), // Adjust size as needed
+                }
+            });
+        }
+
+        function geocode(latLng) {
+            geocoder.geocode({ location: latLng })
+                .then((result) => {
+                    if (result[0]) {
+                        const address = result[0].formatted_address;
+                        addressList.push(address);
+                        updateAddressList();
+                    } else {
+                        console.error("No results found");
+                    }
+                })
+                .catch((e) => {
+                    console.error("Geocode was not successful for the following reason: " + e);
+                });
+        }
+
+        function updateAddressList() {
+            addressListDiv.innerHTML = "<h3>Tree Locations</h3>" +
+                (addressList.length > 0 ? addressList.map(address => `<div>${address}</div>`).join('') : "<div>No trees added yet.</div>");
+        }
+
+        window.initMap = initMap;
+    </script>
+    <style>
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #address-list {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            height: 50%; /* Half the height of the page */
+            width: 250px; /* Set a fixed width for better visibility */
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #address-list h3 {
+            margin: 0;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        #address-list div {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&callback=initMap&v=weekly"
+        defer
+></script>
+</body>
+</html>
