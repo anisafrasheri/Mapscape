@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Tree Markers</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet" />
+    <script>
+        let map;
+        let autocomplete;
+        let markers = []; // Array to store tree markers
+
+        function initMap() {
+            const initialLatLng = { lat: -33.9, lng: 151.2 };
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: initialLatLng,
+            });
+
+            // Initialize the autocomplete functionality
+            initAutocomplete();
+
+            // Add a click listener to add tree markers
+            map.addListener("click", (event) => {
+                addTreeMarker(event.latLng);
+            });
+        }
+
+        function initAutocomplete() {
+            const addressField = document.querySelector("#ship-address");
+
+            // Create the autocomplete object
+            autocomplete = new google.maps.places.Autocomplete(addressField, {
+                componentRestrictions: { country: ["us", "ca"] },
+                fields: ["address_components", "geometry"],
+                types: ["address"],
+            });
+
+            // When the user selects an address from the drop-down, populate the address fields
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+
+        function fillInAddress() {
+            // Get the place details from the autocomplete object
+            const place = autocomplete.getPlace();
+            const location = place.geometry.location;
+
+            // Add a tree marker at the selected address
+            addTreeMarker(location);
+
+            // Set the map's center to the selected address
+            map.setCenter(location);
+            map.setZoom(15); // Optional: Zoom in on the selected address
+        }
+
+        function addTreeMarker(location) {
+            const marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: "Tree",
+                icon: {
+                    url: "https://img.icons8.com/color/48/deciduous-tree.png", // Tree icon URL
+                    scaledSize: new google.maps.Size(30, 30), // Adjust size as needed
+                }
+            });
+
+            // Create an "X" icon for removal
+            const removeIcon = {
+                url: "https://img.icons8.com/ios-filled/50/ffffff/x.png", // X icon URL
+                scaledSize: new google.maps.Size(20, 20),
+                anchor: new google.maps.Point(10, 10) // Center the icon
+            };
+
+            // Add the marker to the markers array
+            markers.push(marker);
+
+            // Show the "X" on hover
+            marker.addListener('mouseover', function () {
+                const xMarker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    icon: removeIcon
+                });
+                xMarker.setMap(map); // Show the "X" icon
+                xMarker.set('parentMarker', marker); // Store reference to parent marker
+
+                // Remove the marker when the "X" is clicked
+                xMarker.addListener('click', function () {
+                    marker.setMap(null); // Remove the tree marker
+                    xMarker.setMap(null); // Remove the "X" icon
+                    markers = markers.filter(m => m !== marker); // Remove from the markers array
+                });
+            });
+
+            // Hide the "X" when the mouse leaves
+            marker.addListener('mouseout', function () {
+                xMarker.setMap(null);
+            });
+        }
+
+        window.initMap = initMap;
+    </script>
+    <style>
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Afacad Flux', sans-serif; /* Ensuring font consistency */
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #004d00; /* Dark green */
+            position: sticky; /* Make the navbar sticky */
+            top: 0; /* Stick to the top */
+            z-index: 1000; /* Ensure it stays above other content */
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px; /* Increased font size */
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px; /* Increased font size for logo */
+        }
+
+        /* Map styles */
+        #map {
+            height: calc(100% - 70px - 140px); /* Adjust height to account for navbar and form */
+        }
+
+        /* Form styles */
+        form {
+            display: flex;
+            align-items: center;
+            max-width: 600px;
+            padding: 10px;
+            margin: 10px auto; /* Center the form */
+        }
+
+        label {
+            margin-right: 10px; /* Space between label and input */
+        }
+
+        input {
+            flex: 1; /* Allow input to take remaining space */
+            padding: 0.5em;
+            border: 1px solid gray;
+            border-radius: 4px; /* Rounded edges */
+            font-family: "Roboto", sans-serif;
+            font-size: 18px;
+            margin-right: 10px; /* Space between input and button */
+        }
+
+        .my-button {
+            background-color: #004d00; /* Dark green */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px; /* Adjust padding for button */
+            cursor: pointer;
+            font-size: 16px;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .my-button:hover {
+            background-color: #666; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div class="logo">🌳 Plant a Tree</div>
+    <ul>
+        <li><a href="index.html">Home</a></li> <!-- Adjusted to link back to the landing page -->
+        <li><a href="#map">Map</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li class="shopping-bag">🛒 Pay for Tree</li>
+    </ul>
+</nav>
+
+<!-- Address Input Form -->
+<form id="address-form" autocomplete="off">
+    <label for="ship-address">Deliver to*</label>
+    <input id="ship-address" name="ship-address" required autocomplete="off" placeholder="Enter your address" />
+    <button type="button" class="my-button" onclick="fillInAddress()">Find Address</button>
+</form>
+
+<!-- Interactive Map -->
+<div id="map"></div>
+
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&callback=initMap&libraries=places&v=weekly"
+        defer
+></script>
+</body>
+</html>
