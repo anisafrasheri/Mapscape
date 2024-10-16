@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant a Tree - Donate and Make a Difference</title>
+    <link href="https://fonts.googleapis.com/css2?family=Londrina+Sketch&family=Afacad+Flux&display=swap" rel="stylesheet">
+    <style>
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Afacad Flux', sans-serif;
+            height: 100%;
+            scroll-behavior: smooth;
+            background-color: white;
+            color: black;
+        }
+
+        /* Navbar styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px; /* Reduced padding */
+            background-color: #004d00; /* Dark green */
+            position: sticky; /* Make the navbar sticky */
+            top: 0; /* Stick to the top */
+            z-index: 1000; /* Ensure it stays above other content */
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px; /* Increased font size */
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px; /* Increased font size for logo */
+        }
+
+        .shopping-bag {
+            background: white;
+            color: #004d00; /* Dark green */
+            padding: 8px;
+            border-radius: 20px;
+            cursor: pointer;
+            border: 2px solid #004d00; /* Dark green */
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            position: relative;
+            text-align: center;
+            color: white;
+            height: 90vh;
+            background: url('https://media.giphy.com/media/xUA7biAmbpRS5yeajK/giphy.gif?cid=ecf05e47xiizvect9ukx41pcx8bsnv36oitdjuz3kv7qvgql&ep=v1_gifs_search&rid=giphy.gif&ct=g') no-repeat center center/cover;
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: rgba(0, 77, 0, 0.7); /* Dark green with transparency */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-family: 'Londrina Sketch', cursive; /* Londrina Sketch font for header */
+        }
+
+        .hero-content button {
+            background-color: #9fd58b; /* Light green */
+            border: none;
+            padding: 15px 30px;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: absolute;
+            bottom: -20px; /* Positioning the button at the bottom of the hero section */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .hero-content button:hover {
+            background-color: #445f3e; /* Darker green */
+        }
+
+        /* Sections */
+        section {
+            padding: 50px;
+            text-align: center;
+        }
+
+        .section-info {
+            background-color: #f4f4f4;
+        }
+
+        .section-info h2 {
+            margin-bottom: 20px;
+            color: #004d00; /* Dark green */
+            font-family: 'Londrina Sketch', cursive; /* Londrina Sketch font for headers */
+        }
+
+        .section-info p {
+            font-size: 18px;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .address-section {
+            background-color: #e0f7fa;
+        }
+
+        .address-section h2 {
+            margin-bottom: 20px;
+            color: #004d00; /* Dark green */
+            font-family: 'Londrina Sketch', cursive; /* Londrina Sketch font for headers */
+        }
+
+        .address-form input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .address-form button {
+            background-color: #004d00; /* Dark green */
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px;
+            text-align: center;
+            background-color: #004d00; /* Dark green */
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div class="logo">🌳 Plant a Tree</div>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#map">Map</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li class="shopping-bag">🛒 Pay for Tree</li>
+    </ul>
+</nav>
+
+<!-- Hero Banner -->
+<section class="hero-banner" id="home">
+    <div class="hero-content">
+        <h1>Make a Difference, Plant a Tree</h1>
+        <button>Donate a Tree</button>
+    </div>
+</section>
+
+<!-- Information Section: Most Deforested Countries -->
+<section class="section-info" id="deforestation-info">
+    <h2>Top 5 Most Deforested Countries</h2>
+    <p>
+        Learn about the countries most affected by deforestation and the impact on the global environment. Together, we can make a difference by planting trees in these regions and restoring vital ecosystems.
+    </p>
+</section>
+
+<!-- Address Section: Where to Plant the Tree -->
+<section class="address-section" id="plant-address">
+    <h2>Choose a Location to Plant Your Tree</h2>
+    <form class="address-form">
+        <input type="text" placeholder="Enter the address where you would like the tree planted" required>
+        <br>
+        <button type="submit">Submit Location</button>
+    </form>
+</section>
+
+<!-- Footer -->
+<footer>
+    © 2024 Plant a Tree. All Rights Reserved.
+</footer>
+
+</body>
+</html>

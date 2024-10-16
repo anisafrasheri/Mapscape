@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forest Cover Type Dataset Visualization</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<gmp-map center="20,-160" zoom="2"></gmp-map>
+<script>
+    (g => {
+        var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window;
+        b = b[c] || (b[c] = {});
+        var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => {
+            await (a = m.createElement("script"));
+            e.set("libraries", [...r] + "");
+            for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+            e.set("callback", c + ".maps." + q);
+            a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+            d[q] = f;
+            a.onerror = () => h = n(Error(p + " could not load."));
+            a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+            m.head.append(a)
+        }));
+        d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
+    })({
+        key: "AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o",
+        v: "beta",
+        solutionChannel: "GMP_CCS_datalayersinfo_v3",
+    });
+</script>
+<script>
+    let map;
+    let infoWindow;
+
+    async function init() {
+        const { InfoWindow } = await google.maps.importLibrary("maps");
+
+        map = document.querySelector('gmp-map').innerMap;
+        infoWindow = new InfoWindow({ pixelOffset: { height: -37 } });
+
+        // Fetch forest cover type data from the local JSON file.
+        fetch('../global-forest-data-2001-2022-metadata.json')
+            .then(response => response.json())
+            .then(data => {
+                map.data.addGeoJson(data); // Assuming the dataset is in GeoJSON format.
+                map.data.addListener('click', (e) => showForestCoverInfo(e.latLng, e.feature));
+            })
+            .catch(error => console.error('Error loading forest cover data:', error));
+    }
+
+    function showForestCoverInfo(position, feature) {
+        const content = `
+          <div style="padding: 8px">
+            <h2 style="margin-top: 0">Forest Cover Type</h2>
+            <p><strong>Cover Type:</strong> ${feature.getProperty('cover_type')}</p>
+            <p><strong>Elevation:</strong> ${feature.getProperty('elevation')}</p>
+            <p><strong>Slope:</strong> ${feature.getProperty('slope')}</p>
+            <p><strong>Aspect:</strong> ${feature.getProperty('aspect')}</p>
+          </div>
+        `;
+
+        infoWindow.setOptions({ content, position });
+        infoWindow.open({ map, shouldFocus: false });
+    }
+
+    init();
+</script>
+</body>
+</html>

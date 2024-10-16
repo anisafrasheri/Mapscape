@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Map with Tree Markers</title>
     <script>
         /**
@@ -38,8 +40,56 @@
         window.initMap = initMap;
     </script>
     <style>
-        #map {
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
             height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Afacad Flux', sans-serif; /* Ensuring font consistency */
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #004d00; /* Dark green */
+            position: sticky; /* Make the navbar sticky */
+            top: 0; /* Stick to the top */
+            z-index: 1000; /* Ensure it stays above other content */
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px; /* Increased font size */
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px; /* Increased font size for logo */
+        }
+
+        /* Map styles */
+        #map {
+            height: calc(100% - 70px); /* Adjust height to account for navbar */
         }
 
         html, body {
@@ -50,7 +100,22 @@
     </style>
 </head>
 <body>
+
+<!-- Navbar -->
+<nav>
+    <div class="logo">🌳 Plant a Tree</div>
+    <ul>
+        <li><a href="index.html">Home</a></li> <!-- Adjusted to link back to the landing page -->
+        <li><a href="#map">Map</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li class="shopping-bag">🛒 Pay for Tree</li>
+    </ul>
+</nav>
+
+<!-- Interactive Map -->
 <div id="map"></div>
+
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&callback=initMap&v=weekly"
         defer
