@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Map with Tree Markers</title>
+    <script>
+        /**
+         * @license
+         * Copyright 2024 Google LLC. All Rights Reserved.
+         * SPDX-License-Identifier: Apache-2.0
+         */
+        let map;
+
+        function initMap() {
+            const initialLatLng = { lat: -33.9, lng: 151.2 };
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: initialLatLng,
+            });
+
+            // Add a click listener to add tree markers
+            map.addListener("click", (event) => {
+                addTreeMarker(event.latLng);
+            });
+        }
+
+        function addTreeMarker(location) {
+            new google.maps.Marker({
+                position: location,
+                map: map,
+                title: "Tree",
+                icon: {
+                    url: "https://img.icons8.com/color/48/deciduous-tree.png", // Tree icon URL
+                    scaledSize: new google.maps.Size(30, 30), // Adjust size as needed
+                }
+            });
+        }
+
+        window.initMap = initMap;
+    </script>
+    <style>
+        #map {
+            height: 100%;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&callback=initMap&v=weekly"
+        defer
+></script>
+</body>
+</html>
