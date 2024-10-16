@@ -155,11 +155,17 @@
 
         /* Form styles */
         form {
+            background-color: Transparent;
+            background-repeat:no-repeat;
+            border: none;
+            cursor:pointer;
+            overflow: hidden;
             display: flex;
             align-items: center;
             max-width: 600px;
             padding: 10px;
             margin: 10px auto; /* Center the form */
+            backface-visibility: hidden;
         }
 
         label {
@@ -198,11 +204,11 @@
 <nav>
     <div class="logo">🌳 Plant a Tree</div>
     <ul>
-        <li><a href="index.html">Home</a></li> <!-- Adjusted to link back to the landing page -->
-        <li><a href="#map">Map</a></li>
+        <li><a href="landingpage.html">Home</a></li> <!-- Adjusted to link back to the landing page -->
+        <li><a href="event+treemarker+search.html">Map</a></li>
         <li><a href="#contact">Contact Us</a></li>
         <li><a href="#about">About Us</a></li>
-        <li class="shopping-bag">🛒 Pay for Tree</li>
+        <li class="shopping-bag"><a href="pay.html">🛒 Pay for Tree</a></li>
     </ul>
 </nav>
 
