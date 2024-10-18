@@ -8,7 +8,7 @@
     <script>
         let map;
         let autocomplete;
-        let markers = []; // Array to store tree markers
+        let markers = []; // Array to store tree markers and addresses
 
         function initMap() {
             const initialLatLng = { lat: -33.9, lng: 151.2 };
@@ -22,7 +22,7 @@
 
             // Add a click listener to add tree markers
             map.addListener("click", (event) => {
-                addTreeMarker(event.latLng);
+                geocodeLatLng(event.latLng);
             });
         }
 
@@ -46,56 +46,74 @@
             const location = place.geometry.location;
 
             // Add a tree marker at the selected address
-            addTreeMarker(location);
+            addTreeMarker(location, place.formatted_address);
 
             // Set the map's center to the selected address
             map.setCenter(location);
             map.setZoom(15); // Optional: Zoom in on the selected address
         }
 
-        function addTreeMarker(location) {
+        function geocodeLatLng(latLng) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: latLng }, (results, status) => {
+                if (status === "OK" && results[0]) {
+                    addTreeMarker(latLng, results[0].formatted_address);
+                } else {
+                    console.error("Geocode was not successful for the following reason: " + status);
+                }
+            });
+        }
+
+        function addTreeMarker(location, address) {
             const marker = new google.maps.Marker({
                 position: location,
                 map: map,
                 title: "Tree",
                 icon: {
                     url: "https://img.icons8.com/color/48/deciduous-tree.png", // Tree icon URL
-                    scaledSize: new google.maps.Size(30, 30), // Adjust size as needed
+                    scaledSize: new google.maps.Size(50, 50), // Adjust size as needed
                 }
             });
 
-            // Create an "X" icon for removal
-            const removeIcon = {
-                url: "https://img.icons8.com/ios-filled/50/ffffff/x.png", // X icon URL
-                scaledSize: new google.maps.Size(20, 20),
-                anchor: new google.maps.Point(10, 10) // Center the icon
-            };
+            // Add the marker and address to the markers array
+            markers.push({ marker, address });
 
-            // Add the marker to the markers array
-            markers.push(marker);
+            // Update the address list in the sidebar
+            updateAddressList();
+        }
 
-            // Show the "X" on hover
-            marker.addListener('mouseover', function () {
-                const xMarker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                    icon: removeIcon
+        function updateAddressList() {
+            const addressList = document.getElementById('address-list');
+            const donateButton = document.getElementById('donate-button');
+            addressList.innerHTML = ''; // Clear the list
+
+            markers.forEach(({ marker, address }, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = address;
+
+                // Create the remove button
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.classList.add('remove-btn');
+
+                // Attach click event listener to the remove button
+                removeButton.addEventListener('click', () => {
+                    // Remove the marker from the map
+                    marker.setMap(null);
+
+                    // Remove the marker and address from the markers array
+                    markers.splice(index, 1);
+
+                    // Update the address list after removal
+                    updateAddressList();
                 });
-                xMarker.setMap(map); // Show the "X" icon
-                xMarker.set('parentMarker', marker); // Store reference to parent marker
 
-                // Remove the marker when the "X" is clicked
-                xMarker.addListener('click', function () {
-                    marker.setMap(null); // Remove the tree marker
-                    xMarker.setMap(null); // Remove the "X" icon
-                    markers = markers.filter(m => m !== marker); // Remove from the markers array
-                });
+                listItem.appendChild(removeButton);
+                addressList.appendChild(listItem);
             });
 
-            // Hide the "X" when the mouse leaves
-            marker.addListener('mouseout', function () {
-                xMarker.setMap(null);
-            });
+            // Show or hide the donate button based on the number of markers
+            donateButton.style.display = markers.length > 0 ? 'block' : 'none';
         }
 
         window.initMap = initMap;
@@ -154,6 +172,69 @@
         /* Map styles */
         #map {
             height: calc(100% - 70px - 140px); /* Adjust height to account for navbar and form */
+            width: 70%; /* Ensure map does not cover the address box */
+            float: left;
+        }
+
+        /* Sidebar styles */
+        #address-box {
+            display: flex;
+            flex-direction: column; /* Stack children vertically */
+            justify-content: space-between; /* Space between children */
+            width: 30%; /* 30% of the screen for the sidebar */
+            height: calc(100% - 70px - 140px); /* Same height as map */
+            float: right;
+            overflow-y: auto; /* Allow scrolling if addresses exceed height */
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        #address-box h2 {
+            font-family: 'Homemade Apple', sans-serif;
+            color: #004d00;
+            margin-bottom: 15px;
+        }
+
+        #address-list {
+            list-style-type: none;
+            padding-left: 0;
+            flex-grow: 1; /* Allow the list to take remaining space */
+            overflow-y: auto; /* Scroll if the list is too long */
+        }
+
+        #address-list li {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Button styles */
+        .remove-btn {
+            background-color: #ff4d4d; /* Red color for remove button */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .donate-button {
+            display: none; /* Initially hidden */
+            background-color: #004d00; /* Dark green */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px; /* Adjust padding for button */
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px; /* Space above the button */
+            width: 100%; /* Full width */
         }
 
         /* Form styles */
@@ -193,11 +274,10 @@
             padding: 8px 16px; /* Adjust padding for button */
             cursor: pointer;
             font-size: 16px;
-            white-space: nowrap; /* Prevent wrapping */
         }
 
         .my-button:hover {
-            background-color: #666; /* Darker green on hover */
+            background-color: #003300; /* Darker green on hover */
         }
     </style>
 </head>
@@ -207,7 +287,7 @@
 <nav>
     <div class="logo">🌳 Plant a Tree</div>
     <ul>
-        <li><a href="landingpage.html">Home</a></li> <!-- Adjusted to link back to the landing page -->
+        <li><a href="landingpage.html">Home</a></li>
         <li><a href="event+treemarker+search.html">Map</a></li>
         <li><a href="#contact">Contact Us</a></li>
         <li><a href="aboutus.html">About Us</a></li>
@@ -222,8 +302,15 @@
     <button type="button" class="my-button" onclick="fillInAddress()">Find Address</button>
 </form>
 
-<!-- Interactive Map -->
+<!-- Interactive Map and Address Box -->
 <div id="map"></div>
+<div id="address-box">
+    <h2>Planted Tree Locations</h2>
+    <ul id="address-list">
+        <!-- Tree addresses will appear here -->
+    </ul>
+    <button id="donate-button" class="donate-button">Donate a Tree</button>
+</div>
 
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&callback=initMap&libraries=places&v=weekly"
