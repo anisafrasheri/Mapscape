@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plant a Tree - Donate and Make a Difference</title>
-    <link href="https://fonts.googleapis.com/css2?family=Londrina+Sketch&family=Afacad+Flux&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Afacad+Flux&display=swap" rel="stylesheet">
     <style>
         /* General styles */
         * {
@@ -23,14 +23,15 @@
 
         /* Navbar styles */
         nav {
+            font-family: 'Homemade Apple', sans-serif;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px; /* Reduced padding */
-            background-color: #004d00; /* Dark green */
-            position: sticky; /* Make the navbar sticky */
-            top: 0; /* Stick to the top */
-            z-index: 1000; /* Ensure it stays above other content */
+            padding: 10px 20px;
+            background-color: transparent; /* Transparent background */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         nav ul {
@@ -43,23 +44,36 @@
         }
 
         nav ul li a {
-            color: white;
+            color: #004d00; /* Dark green color */
             text-decoration: none;
-            font-size: 18px; /* Increased font size */
+            font-size: 20px; /* Larger font size */
+            font-weight: bold; /* Bold text */
         }
 
         .logo {
-            color: white;
-            font-size: 24px; /* Increased font size for logo */
+            color: #004d00; /* Dark green color for the logo */
+            font-size: 28px; /* Larger font size for the logo */
+            font-weight: bold; /* Bold logo text */
         }
 
         .shopping-bag {
             background: white;
-            color: #004d00; /* Dark green */
+            color: #004d00;
             padding: 8px;
             border-radius: 20px;
             cursor: pointer;
-            border: 2px solid #004d00; /* Dark green */
+            border: 2px solid #004d00;
+        }
+
+        /* Scrolled styles for white text */
+        .scrolled nav ul li a, .scrolled .logo {
+            color: white !important;
+        }
+
+        .scrolled .shopping-bag {
+            background: #004d00;
+            color: white;
+            border-color: white;
         }
 
         /* Hero Banner */
@@ -77,7 +91,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            background-color: rgba(0, 77, 0, 0.7); /* Dark green with transparency */
+            background-color: rgba(0, 77, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
         }
@@ -85,11 +99,11 @@
         .hero-content h1 {
             font-size: 48px;
             margin-bottom: 20px;
-            font-family: 'Londrina Sketch', cursive; /* Londrina Sketch font for header */
+            font-family: 'Homemade Apple', cursive;
         }
 
         .hero-content button {
-            background-color: #9fd58b; /* Light green */
+            background-color: #9fd58b;
             border: none;
             padding: 15px 30px;
             color: white;
@@ -98,13 +112,13 @@
             cursor: pointer;
             transition: background-color 0.3s;
             position: absolute;
-            bottom: -20px; /* Positioning the button at the bottom of the hero section */
+            bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .hero-content button:hover {
-            background-color: #445f3e; /* Darker green */
+            background-color: #445f3e;
         }
 
         /* Sections */
@@ -119,8 +133,8 @@
 
         .section-info h2 {
             margin-bottom: 20px;
-            color: #004d00; /* Dark green */
-            font-family: 'Londrina Sketch', cursive; /* Londrina Sketch font for headers */
+            color: #004d00;
+            font-family: 'Homemade Apple', cursive;
         }
 
         .section-info p {
@@ -136,8 +150,8 @@
 
         .address-section h2 {
             margin-bottom: 20px;
-            color: #004d00; /* Dark green */
-            font-family: 'Londrina Sketch', cursive; /* Londrina Sketch font for headers */
+            color: #004d00;
+            font-family: 'Homemade Apple', cursive;
         }
 
         .address-form input[type="text"] {
@@ -150,7 +164,7 @@
         }
 
         .address-form button {
-            background-color: #004d00; /* Dark green */
+            background-color: #004d00;
             border: none;
             padding: 10px 20px;
             color: white;
@@ -163,7 +177,7 @@
         footer {
             padding: 20px;
             text-align: center;
-            background-color: #004d00; /* Dark green */
+            background-color: #004d00;
             color: white;
             margin-top: 20px;
         }
@@ -175,7 +189,7 @@
 <nav>
     <div class="logo">🌳 Plant a Tree</div>
     <ul>
-        <li><a href="landingpage.html">Home</a></li> <!-- Adjusted to link back to the landing page -->
+        <li><a href="landingpage.html">Home</a></li>
         <li><a href="event+treemarker+search.html">Map</a></li>
         <li><a href="#contact">Contact Us</a></li>
         <li><a href="aboutus.html">About Us</a></li>
@@ -213,6 +227,20 @@
 <footer>
     © 2024 Plant a Tree. All Rights Reserved.
 </footer>
+
+<!-- JavaScript to change navbar text color on scroll -->
+<script>
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('nav');
+        const body = document.body;
+
+        if (window.scrollY > 100) {  // When user scrolls down 100px from the top
+            body.classList.add('scrolled');
+        } else {
+            body.classList.remove('scrolled');
+        }
+    });
+</script>
 
 </body>
 </html>

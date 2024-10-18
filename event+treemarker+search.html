@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Map with Tree Markers</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Afacad+Flux&display=swap" rel="stylesheet">
     <script>
         let map;
         let autocomplete;
@@ -118,14 +118,15 @@
 
         /* Navbar styles */
         nav {
+            font-family: 'Homemade Apple', sans-serif;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: #004d00; /* Dark green */
-            position: sticky; /* Make the navbar sticky */
-            top: 0; /* Stick to the top */
-            z-index: 1000; /* Ensure it stays above other content */
+            padding: 10px 20px;
+            background-color: transparent; /* Transparent background */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         nav ul {
@@ -138,14 +139,16 @@
         }
 
         nav ul li a {
-            color: white;
+            color: #004d00; /* Dark green color */
             text-decoration: none;
-            font-size: 18px; /* Increased font size */
+            font-size: 20px; /* Larger font size */
+            font-weight: bold; /* Bold text */
         }
 
         .logo {
-            color: white;
-            font-size: 24px; /* Increased font size for logo */
+            color: #004d00; /* Dark green color for the logo */
+            font-size: 28px; /* Larger font size for the logo */
+            font-weight: bold; /* Bold logo text */
         }
 
         /* Map styles */
