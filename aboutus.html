@@ -105,6 +105,35 @@
                 margin-bottom: 30px;
             }
         }
+
+        .social-links li {
+            list-style: none;
+            display: inline-block;
+
+        }
+        .social-links li a {
+            height: 50px;
+            width: 50px;
+            display: block;
+            float: left;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            position: relative;
+        }
+        .social-links li a ion-icon {
+            position: absolute;
+            font-size: 26px;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            transition: all 0.3s;
+        }
+        .social-links li a:hover {
+            color: #111;
+            transition: all 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -125,22 +154,42 @@
 <div class="about-us-container">
     <!-- Founder 1 Column -->
     <div class="about-us-column">
-        <img src="founder1.jpg" alt="Founder 1 Image">
+        <img src="../img/anisa.jpeg" alt="Anisa">
         <h3>Anisa "Stella" Frasheri</h3>
         <p>
-            Founder 1 is a visionary leader with a passion for the environment and technology. With over 10 years of experience in sustainable projects, they have been instrumental in driving our mission to plant trees and make the world greener.
+            Anisa is the founder and ideator behind this innovative web projects, leveraging her skills as a full-stack developer to bring her ideas to life. With a passion for technology and community engagement, she has become a prominent Google Maps contributor, amassing thousands of reviews that help users navigate their surroundings. Anisa truly enjoys working with and for Google Maps, utilizing the platform to share her insights and enhance the user experience.
+        <br> <ul class="social-links list-unstyled mt-4">
+        <li><a href="mailto:anisafrasheri9@gmail.com">
+            <ion-icon name="mail-outline"></ion-icon>
+        </a></li>
+        <li><a href="https://github.com/anisafrasheri">
+            <ion-icon name="logo-github"></ion-icon>
+        </a></li>
+        <li><a href="https://www.linkedin.com/in/anisa-frasheri-b51709225/">
+            <ion-icon name="logo-linkedin"></ion-icon>
+        </a></li>
+        <li><a href="https://www.threads.net/@anisafrasherii">
+            <ion-icon name="at-circle-outline"></ion-icon>
+        </a></li>
+        <li><a href="https://www.instagram.com/anisafrasherii">
+            <ion-icon name="logo-instagram"></ion-icon>
+        </a></li>
+        <li><a href="https://vs.co/bxz3brkf">
+            <ion-icon name="nuclear-outline"></ion-icon>
+        </a></li>
+    </ul>
         </p>
     </div>
 
     <!-- Founder 2 Column -->
     <div class="about-us-column">
-        <img src="founder2.jpg" alt="Founder 2 Image">
+        <img src="founder2.jpg" alt="Doris">
         <h3>Doris "Bloom" Kole</h3>
         <p>
             Founder 2 brings a unique blend of expertise in education and innovation. They have spearheaded multiple projects that empower communities to take environmental action, making them a key figure in the success of our initiative.
         </p>
     </div>
 </div>
-
+<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 </body>
 </html>
