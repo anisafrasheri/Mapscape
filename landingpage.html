@@ -275,11 +275,79 @@
 
 <!-- Information Section: Most Deforested Countries -->
 <section class="section-info" id="deforestation-info">
-    <h2>Top 5 Most Deforested Countries</h2>
+    <h2>Top 10 Most Deforested Countries</h2>
     <p>
-        Learn about the countries most affected by deforestation and the impact on the global environment. Together, we can make a difference by planting trees in these regions and restoring vital ecosystems.
+        Explore the countries that have experienced the most significant deforestation over the past decades, as highlighted in the table below. The loss of forested areas in these regions not only threatens biodiversity but also accelerates climate change, disrupts ecosystems, and impacts the livelihoods of millions. By understanding the scale of deforestation and the global environmental consequences, we can take action—whether through reforestation efforts, supporting sustainable practices, or restoring these vital ecosystems for future generations.
     </p>
+
+    <!-- Table of Most Deforested Countries -->
+    <table>
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Country</th>
+            <th>Forest Area Change 1990-2020 (mi²)</th>
+            <th>Change in Forest Area (%)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>Brazil</td>
+            <td>-356,287</td>
+            <td>-15.67</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Indonesia</td>
+            <td>-101,977</td>
+            <td>-22.28</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>DR Congo</td>
+            <td>-94,495</td>
+            <td>-16.25</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Angola</td>
+            <td>-48,865</td>
+            <td>-15.97</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Tanzania</td>
+            <td>-44,962</td>
+            <td>-20.29</td>
+        </tr>
+        </tbody>
+    </table>
 </section>
+
+<!-- CSS Styling for the Table -->
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #dddddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+</style>
+
 
 <!-- Address and Slideshow Section -->
 <section class="address-section" id="plant-address1">
@@ -289,10 +357,10 @@
     </div>
     <div class="slideshow">
         <!-- Image 1 -->
-        <img src="../img/forest.jpg" id="slide1" alt="Before deforestation" class="active-slide">
+        <img src="./img/forest.jpg" id="slide1" alt="Before deforestation" class="active-slide">
 
         <!-- Image 2 (Initially hidden) -->
-        <img src="../img/deforestation.jpg" id="slide2" alt="After reforestation" class="inactive-slide">
+        <img src="./img/deforestation.jpg" id="slide2" alt="After reforestation" class="inactive-slide">
 
         <!-- Slideshow buttons -->
         <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
