@@ -28,7 +28,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            background-color: transparent; /* Transparent background */
+            background-color: transparent;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -44,16 +44,16 @@
         }
 
         nav ul li a {
-            color: #004d00; /* Dark green color */
+            color: #004d00;
             text-decoration: none;
-            font-size: 20px; /* Larger font size */
-            font-weight: bold; /* Bold text */
+            font-size: 20px;
+            font-weight: bold;
         }
 
         .logo {
-            color: #004d00; /* Dark green color for the logo */
-            font-size: 28px; /* Larger font size for the logo */
-            font-weight: bold; /* Bold logo text */
+            color: #004d00;
+            font-size: 28px;
+            font-weight: bold;
         }
 
         .shopping-bag {
@@ -65,7 +65,7 @@
             border: 2px solid #004d00;
         }
 
-        /* Scrolled styles for white text */
+        /* Scrolled styles */
         .scrolled nav ul li a, .scrolled .logo {
             color: white !important;
         }
@@ -145,13 +145,81 @@
         }
 
         .address-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background-color: #e0f7fa;
+            padding: 50px 10%;
         }
 
         .address-section h2 {
             margin-bottom: 20px;
             color: #004d00;
             font-family: 'Homemade Apple', cursive;
+        }
+
+        .address-section-left {
+            width: 50%;
+            text-align: left;
+        }
+
+        .address-section-left p {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .address-section-left button {
+            background-color: #004d00;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .slideshow {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .slideshow img {
+            width: 100%;
+            display: none;
+            border-radius: 10px;
+            transition: opacity 0.5s ease;
+        }
+
+        .active-slide {
+            display: block;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            color: #004d00;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        /* Address Form Section */
+        .address-form {
+            text-align: center;
         }
 
         .address-form input[type="text"] {
@@ -201,7 +269,7 @@
 <section class="hero-banner" id="home">
     <div class="hero-content">
         <h1>Make a Difference, Plant a Tree</h1>
-        <button>Donate a Tree</button>
+        <button><a href="pay.html">Donate a Tree</a></button>
     </div>
 </section>
 
@@ -213,22 +281,40 @@
     </p>
 </section>
 
+<!-- Address and Slideshow Section -->
+<section class="address-section" id="plant-address1">
+    <div class="address-section-left">
+        <h2>The World Lost 6.6 Million Hectares of Forest in 2022</h2>
+        <p>According to the Forest Declaration Assessment, the world witnessed a staggering loss of 6.6 million hectares of forest cover in 2022. Ninety-six percent of this loss occurred in tropical regions, equating to 4.4 million hectares. The impact of deforestation includes biodiversity decline, rising carbon emissions, and community displacement. Conservation efforts are crucial to reversing these trends.</p>
+    </div>
+    <div class="slideshow">
+        <!-- Image 1 -->
+        <img src="../img/forest.jpg" id="slide1" alt="Before deforestation" class="active-slide">
+
+        <!-- Image 2 (Initially hidden) -->
+        <img src="../img/deforestation.jpg" id="slide2" alt="After reforestation" class="inactive-slide">
+
+        <!-- Slideshow buttons -->
+        <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+        <button class="next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+</section>
+
 <!-- Address Section: Where to Plant the Tree -->
 <section class="address-section" id="plant-address">
     <h2>Choose a Location to Plant Your Tree</h2>
     <form class="address-form">
         <input type="text" placeholder="Enter the address where you would like the tree planted" required>
-        <br>
-        <button type="submit">Submit Location</button>
+        <button type="submit">Submit</button>
     </form>
 </section>
 
 <!-- Footer -->
 <footer>
-    © 2024 Plant a Tree. All Rights Reserved.
+    <p>&copy; 2024 Plant a Tree - Make a Difference</p>
 </footer>
 
-<!-- JavaScript to change navbar text color on scroll -->
+<!-- JavaScript for Slideshow -->
 <script>
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('nav');
@@ -240,6 +326,43 @@
             body.classList.remove('scrolled');
         }
     });
+
+    let slideIndex = 0;
+    const slides = [
+        "https://example.com/before.jpg",
+        "https://example.com/after.jpg",
+        "https://example.com/forest-recovery.jpg"
+    ];
+
+    function changeSlide(direction) {
+        slideIndex += direction;
+        if (slideIndex < 0) {
+            slideIndex = slides.length - 1;
+        } else if (slideIndex >= slides.length) {
+            slideIndex = 0;
+        }
+        document.getElementById("slide").src = slides[slideIndex];
+    }
+    let currentSlide = 1;
+
+    // Function to change slides
+    function changeSlide(direction) {
+        // Hide the current slide
+        document.getElementById(`slide${currentSlide}`).classList.remove('active-slide');
+        document.getElementById(`slide${currentSlide}`).classList.add('inactive-slide');
+
+        // Calculate the next slide
+        currentSlide += direction;
+        if (currentSlide < 1) {
+            currentSlide = 2; // Go to the last slide if going backwards from the first
+        } else if (currentSlide > 2) {
+            currentSlide = 1; // Go to the first slide if advancing past the last
+        }
+
+        // Show the next slide
+        document.getElementById(`slide${currentSlide}`).classList.remove('inactive-slide');
+        document.getElementById(`slide${currentSlide}`).classList.add('active-slide');
+    }
 </script>
 
 </body>
