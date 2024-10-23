@@ -129,6 +129,64 @@
             color: white;
             margin-top: 20px;
         }
+
+        /* Fireworks Animation */
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            display: none; /* Hidden initially */
+        }
+
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            animation: firework-animation 1.5s ease-out infinite;
+        }
+
+        @keyframes firework-animation {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(3);
+            }
+        }
+
+        /* Thank You Message Modal */
+        .thank-you-modal {
+            display: none; /* Hidden initially */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .thank-you-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .thank-you-content h2 {
+            margin-bottom: 10px;
+            color: #004d00;
+        }
+
     </style>
 </head>
 <body>
@@ -149,21 +207,83 @@
 <section class="payment-section">
     <div class="payment-details">
         <h2>Payment Details</h2>
-        <form class="payment-form" action="#" method="POST"> <!-- Add your payment processing URL -->
+        <form class="payment-form" id="paymentForm" action="#" method="POST">
             <input type="text" placeholder="Cardholder Name" required>
             <input type="text" placeholder="Card Number" required>
             <input type="text" placeholder="Expiry Date (MM/YY)" required>
             <input type="number" placeholder="CVV" required>
-            <input type="email" placeholder="Email Address" required>
+            <input type="email" id="emailInput" placeholder="Email Address" required>
             <button type="submit">Submit Payment</button>
         </form>
     </div>
 </section>
 
+<!-- Fireworks -->
+<div class="fireworks" id="fireworks"></div>
+
+<!-- Thank You Modal -->
+<div class="thank-you-modal" id="thankYouModal">
+    <div class="thank-you-content">
+        <h2>Thank You for Your Donation!</h2>
+        <p>A thank you message will be sent to your email.</p>
+    </div>
+</div>
+
 <!-- Footer -->
 <footer>
     © 2024 Plant a Tree. All Rights Reserved.
 </footer>
+
+<script>
+    // Fireworks Animation Logic
+    const paymentForm = document.getElementById('paymentForm');
+    const fireworks = document.getElementById('fireworks');
+    const thankYouModal = document.getElementById('thankYouModal');
+    const emailInput = document.getElementById('emailInput'); // Get the email input from the form
+
+    paymentForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission for demo
+
+        // Validate form fields
+        const inputs = paymentForm.querySelectorAll('input');
+        let allFilled = true;
+
+        inputs.forEach(input => {
+            if (!input.value) {
+                allFilled = false;
+            }
+        });
+
+        if (allFilled) {
+            // Show fireworks
+            fireworks.style.display = 'block';
+
+            // Generate some random fireworks
+            for (let i = 0; i < 10; i++) {
+                let firework = document.createElement('div');
+                firework.classList.add('firework');
+                firework.style.left = Math.random() * 100 + 'vw';
+                firework.style.bottom = Math.random() * 100 + 'vh';
+                fireworks.appendChild(firework);
+                setTimeout(() => firework.remove(), 1500); // Remove after animation
+            }
+
+            // Show thank you modal
+            setTimeout(() => {
+                fireworks.style.display = 'none';
+                thankYouModal.style.display = 'flex';
+
+                // Use the email from the form in the thank you message
+                const email = emailInput.value;
+                if (email) {
+                    alert('Thank you! A thank you message will be sent to ' + email);
+                }
+            }, 2000);
+        } else {
+            alert('Please fill in all fields before submitting.');
+        }
+    });
+</script>
 
 </body>
 </html>
