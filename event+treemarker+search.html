@@ -59,7 +59,6 @@
             map.setZoom(15); // Optional: Zoom in on the selected address
         }
 
-
         function geocodeLatLng(latLng) {
             const geocoder = new google.maps.Geocoder();
             geocoder.geocode({ location: latLng }, (results, status) => {
@@ -98,6 +97,11 @@
                 const listItem = document.createElement('li');
                 listItem.textContent = address;
 
+                // Create the view button
+                const viewButton = document.createElement('button');
+                viewButton.textContent = 'View';
+                viewButton.classList.add('view-btn');
+
                 // Create the remove button
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Remove';
@@ -115,6 +119,8 @@
                     updateAddressList();
                 });
 
+                // Append buttons in the desired order (View on the left, Remove on the right)
+                listItem.appendChild(viewButton);
                 listItem.appendChild(removeButton);
                 addressList.appendChild(listItem);
             });
@@ -231,6 +237,17 @@
             font-size: 12px;
         }
 
+        .view-btn {
+            background-color: #4caf50; /* Green color for view button */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 8px; /* Add space between buttons */
+        }
+
         .donate-button {
             display: none; /* Initially hidden */
             background-color: #004d00; /* Dark green */
@@ -266,30 +283,12 @@
         input {
             flex: 1; /* Allow input to take remaining space */
             padding: 0.5em;
-            border: 1px solid gray;
-            border-radius: 4px; /* Rounded edges */
-            font-family: "Roboto", sans-serif;
-            font-size: 18px;
-            margin-right: 10px; /* Space between input and button */
-        }
-
-        .my-button {
-            background-color: #004d00; /* Dark green */
-            color: #fff;
-            border: none;
+            border: 1px solid #ccc;
             border-radius: 4px;
-            padding: 8px 16px; /* Adjust padding for button */
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .my-button:hover {
-            background-color: #003300; /* Darker green on hover */
         }
     </style>
 </head>
 <body>
-
 <!-- Navbar -->
 <nav>
     <div class="logo">🌳 Plant a Tree</div>
@@ -302,33 +301,20 @@
     </ul>
 </nav>
 
-<!-- Address Input Form -->
-<form id="address-form" autocomplete="off">
-    <label for="ship-address">Deliver to*</label>
-    <input id="ship-address" name="ship-address" required autocomplete="off" placeholder="Enter your address" />
-    <button type="button" class="my-button" onclick="fillInAddress()">Find Address</button>
+<form>
+    <label for="ship-address">Enter address:</label>
+    <input type="text" id="ship-address" name="ship-address">
 </form>
 
-<!-- Interactive Map and Address Box -->
 <div id="map"></div>
 <div id="address-box">
-    <h2>Planted Tree Locations</h2>
-    <ul id="address-list">
-        <!-- Tree addresses will appear here -->
-    </ul>
-    <button id="donate-button" class="donate-button" onclick="redirectToDonatePage()">Donate</button>
+    <h2>Your tree address:</h2>
+    <ul id="address-list"></ul>
+    <button id="donate-button" class="donate-button">Donate</button>
 </div>
-<script>
-    // Add this function to handle the redirection
-    function redirectToDonatePage() {
-        window.location.href = "pay.html"; // Redirect to the pay.html page
-    }
 
-    // ... rest of your JavaScript code
-</script>
-<script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&callback=initMap&libraries=places&v=weekly"
-        defer
-></script>
+<!-- Add your Google Maps API Key in the script below -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places&callback=initMap"
+        async defer></script>
 </body>
 </html>
