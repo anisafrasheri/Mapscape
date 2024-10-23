@@ -249,6 +249,61 @@
             color: white;
             margin-top: 20px;
         }
+
+        /* Overall Progress Wrapper */
+        #overall-progress-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100px; /* Adjust height as needed */
+            margin: 20px 0; /* Space above and below */
+        }
+
+        /* Overall Progress Container */
+        #overall-progress-container {
+            text-align: center;
+            background-color: #7db16d; /* Light background for contrast */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Space inside the container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            width: 1000px;
+            margin-bottom: 30px;
+        }
+
+        /* Progress Bar Styles */
+        #overall-progress-bar {
+            width: 100%; /* Full width */
+            height: 20px; /* Height of the progress bar */
+            border-radius: 10px; /* Rounded corners */
+            margin: 10px 0; /* Space above and below the bar */
+        }
+
+        /* Progress Bar Color */
+        #overall-progress-bar::-webkit-progress-bar {
+            background-color: #e0e0e0; /* Light gray for the empty part */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        #overall-progress-bar::-webkit-progress-value {
+            background-color: #004d00; /* Dark green for the filled part */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        /* Progress Text Styles */
+        #overall-progress-text {
+            font-size: 16px; /* Font size for progress text */
+            color: #004d00; /* Dark green color */
+            font-weight: bold; /* Bold text */
+        }
+
+        #progress-text{
+            justify-content: center;
+            align-content: center;
+            font-family: 'Homemade Apple', cursive;
+            padding-left: 320px;
+            color: #004d00;
+        }
     </style>
 </head>
 <body>
@@ -272,6 +327,23 @@
         <button><a href="pay.html">Donate a Tree</a></button>
     </div>
 </section>
+
+<!--Define the Total Tree Goal: Set a goal for how many trees should be planted (e.g., 1000 trees).-->
+<!--Track Total Trees Planted: Each time a user plants a tree, increment the overall total.-->
+<!--Update the Progress Bar: As the total number of trees planted increases, update the progress bar to reflect this.-->
+
+<!-- Progress Bar for Overall Tree Planting -->
+<div id="progress">
+    <h1 id="progress-text"> Our mission to plant at least 100 trees this month </h1>
+<div id="overall-progress-wrapper">
+    <div id="overall-progress-container">
+        <h3>Total Trees Planted</h3>
+        <progress id="overall-progress-bar" value="0" max="1000"></progress>
+        <p id="overall-progress-text">0/1000 trees planted</p>
+    </div>
+</div>
+</div>
+
 
 <!-- Information Section: Most Deforested Countries -->
 <section class="section-info" id="deforestation-info">
@@ -431,6 +503,48 @@
         document.getElementById(`slide${currentSlide}`).classList.remove('inactive-slide');
         document.getElementById(`slide${currentSlide}`).classList.add('active-slide');
     }
+    // Initialize the total trees planted
+    let totalTreesPlanted = 0;
+    const totalTreeGoal = 1000; // Define your overall goal (e.g., 1000 trees)
+
+    function updateOverallProgress() {
+        const overallProgressBar = document.getElementById("overall-progress-bar");
+        const overallProgressText = document.getElementById("overall-progress-text");
+
+        // Update the progress bar value
+        overallProgressBar.value = totalTreesPlanted;
+        overallProgressBar.max = totalTreeGoal;
+
+        // Update the text to show the number of trees planted
+        overallProgressText.textContent = `${totalTreesPlanted}/${totalTreeGoal} trees planted`;
+    }
+
+    function addTreeMarker(location, address) {
+        // Existing marker creation code...
+
+        // Increment the overall number of trees planted
+        totalTreesPlanted++;
+
+        // Update the overall progress bar
+        updateOverallProgress();
+    }
+
+    // Load totalTreesPlanted from local storage on page load
+    window.onload = () => {
+        totalTreesPlanted = localStorage.getItem("totalTreesPlanted") || 0;
+        updateOverallProgress();
+    };
+
+    // Save totalTreesPlanted to local storage when a tree is planted
+    function addTreeMarker(location, address) {
+        // Existing marker creation code...
+
+        totalTreesPlanted++;
+        localStorage.setItem("totalTreesPlanted", totalTreesPlanted); // Save to local storage
+
+        updateOverallProgress();
+    }
+
 </script>
 
 </body>
