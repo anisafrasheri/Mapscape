@@ -3,287 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment - Plant a Tree</title>
-    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Afacad+Flux&display=swap" rel="stylesheet">
+    <title>Payment Page</title>
     <style>
-        /* General styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
-            font-family: 'Afacad Flux', sans-serif;
-            height: 100%;
-            scroll-behavior: smooth;
-            background-color: #f9f9f9; /* Light background for a softer look */
-            color: black;
-        }
-
-        /* Navbar styles */
-        nav {
-            font-family: 'Homemade Apple', sans-serif;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: transparent; /* Transparent background */
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: #004d00; /* Dark green color */
-            text-decoration: none;
-            font-size: 20px; /* Larger font size */
-            font-weight: bold; /* Bold text */
-        }
-
-        .logo {
-            color: #004d00; /* Dark green color for the logo */
-            font-size: 28px; /* Larger font size for the logo */
-            font-weight: bold; /* Bold logo text */
-        }
-
-        /* Payment Section */
+        /* Keep your existing CSS styling */
         .payment-section {
-            display: flex; /* Use flexbox for layout */
-            align-items: center;
-            justify-content: center;
+            text-align: center;
             padding: 50px;
-            background-image: url('https://media.giphy.com/media/xUA7b4arnbo3THfzi0/giphy.gif?cid=ecf05e47wkn9x8vi1ni032ko5zzeji01t0yhzxhemvv354fj&ep=v1_gifs_search&rid=giphy.gif&ct=g'); /* Replace with your background image URL */
-            background-size: cover; /* Cover the entire section */
-            background-position: center; /* Center the background image */
-            opacity: 0.9; /* Slight transparency for a softer look */
-            min-height: 100vh; /* Full height of the viewport */
         }
 
         .payment-details {
-            max-width: 400px;
-            background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+            margin: auto;
+            width: 300px;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            margin-left: 50px; /* Add space on the left for the image */
-        }
-
-        .payment-section h2 {
-            margin-bottom: 20px;
-            color: #004d00; /* Dark green */
-            font-family: 'Homemade Apple', cursive; /* Custom font for headers */
-            text-align: center; /* Center align the header */
-        }
-
-        .payment-form input[type="text"],
-        .payment-form input[type="number"],
-        .payment-form input[type="email"] {
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 15px;
-            border-radius: 5px;
             border: 1px solid #ccc;
-            font-size: 16px;
-            transition: border 0.3s; /* Transition for input border */
+            border-radius: 10px;
         }
 
-        .payment-form input[type="text"]:focus,
-        .payment-form input[type="number"]:focus,
-        .payment-form input[type="email"]:focus {
-            border: 1px solid #004d00; /* Dark green border on focus */
-        }
-
-        .payment-form button {
-            background-color: #004d00; /* Dark green */
-            border: none;
-            padding: 10px 20px;
-            color: white;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s; /* Transition for background and scaling */
+        label, input {
             display: block;
-            margin: 0 auto; /* Center the button */
+            width: 100%;
+            margin-bottom: 10px;
         }
 
-        .payment-form button:hover {
-            background-color: #003300; /* Darker green */
-            transform: scale(1.05); /* Scale up button */
-        }
-
-        /* Footer */
-        footer {
-            padding: 20px;
-            text-align: center;
-            background-color: #004d00; /* Dark green */
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
             color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #paypal-button-container {
             margin-top: 20px;
         }
-
-        /* Fireworks Animation */
-        .fireworks {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            display: none; /* Hidden initially */
-        }
-
-        .firework {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            border-radius: 50%;
-            animation: firework-animation 1.5s ease-out infinite;
-        }
-
-        @keyframes firework-animation {
-            0% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(3);
-            }
-        }
-
-        /* Thank You Message Modal */
-        .thank-you-modal {
-            display: none; /* Hidden initially */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .thank-you-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .thank-you-content h2 {
-            margin-bottom: 10px;
-            color: #004d00;
-        }
-
     </style>
 </head>
 <body>
-
-<!-- Navbar -->
-<nav>
-    <div class="logo">🌳 Plant a Tree</div>
-    <ul>
-        <li><a href="landingpage.html">Home</a></li>
-        <li><a href="event+treemarker+search.html">Map</a></li>
-        <li><a href="aboutus.html">About Us</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li class="shopping-bag"><a href="pay.html">🛒 Pay for Tree</a></li>
-    </ul>
-</nav>
 
 <!-- Payment Section -->
 <section class="payment-section">
     <div class="payment-details">
         <h2>Payment Details</h2>
-        <form class="payment-form" id="paymentForm" action="#" method="POST">
-            <input type="text" placeholder="Cardholder Name" required>
-            <input type="text" placeholder="Card Number" required>
-            <input type="text" placeholder="Expiry Date (MM/YY)" required>
-            <input type="number" placeholder="CVV" required>
-            <input type="email" id="emailInput" placeholder="Email Address" required>
+        <form id="payment-form">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" name="amount" min="1" required>
+
             <button type="submit">Submit Payment</button>
         </form>
+
+        <!-- PayPal Button -->
+        <div id="paypal-button-container"></div>
     </div>
 </section>
 
-<!-- Fireworks -->
-<div class="fireworks" id="fireworks"></div>
-
-<!-- Thank You Modal -->
-<div class="thank-you-modal" id="thankYouModal">
-    <div class="thank-you-content">
-        <h2>Thank You for Your Donation!</h2>
-        <p>A thank you message will be sent to your email.</p>
-    </div>
-</div>
-
-<!-- Footer -->
-<footer>
-    © 2024 Plant a Tree. All Rights Reserved.
-</footer>
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
 
 <script>
-    // Fireworks Animation Logic
-    const paymentForm = document.getElementById('paymentForm');
-    const fireworks = document.getElementById('fireworks');
-    const thankYouModal = document.getElementById('thankYouModal');
-    const emailInput = document.getElementById('emailInput'); // Get the email input from the form
+    document.getElementById('payment-form').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent form submission
+        const amount = document.getElementById('amount').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
 
-    paymentForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission for demo
+        // Display PayPal button after form submission
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: amount // Use the amount entered by the user
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Simulate fireworks and sending email here
+                    alert('Payment completed by ' + details.payer.name.given_name);
 
-        // Validate form fields
-        const inputs = paymentForm.querySelectorAll('input');
-        let allFilled = true;
-
-        inputs.forEach(input => {
-            if (!input.value) {
-                allFilled = false;
+                    // Redirect to success page after payment
+                    window.location.href = 'success.html?name=' + name + '&email=' + email;
+                });
+            },
+            onError: function(err) {
+                console.error(err);
+                alert('Payment failed. Please try again.');
             }
-        });
-
-        if (allFilled) {
-            // Show fireworks
-            fireworks.style.display = 'block';
-
-            // Generate some random fireworks
-            for (let i = 0; i < 10; i++) {
-                let firework = document.createElement('div');
-                firework.classList.add('firework');
-                firework.style.left = Math.random() * 100 + 'vw';
-                firework.style.bottom = Math.random() * 100 + 'vh';
-                fireworks.appendChild(firework);
-                setTimeout(() => firework.remove(), 1500); // Remove after animation
-            }
-
-            // Show thank you modal
-            setTimeout(() => {
-                fireworks.style.display = 'none';
-                thankYouModal.style.display = 'flex';
-
-                // Use the email from the form in the thank you message
-                const email = emailInput.value;
-                if (email) {
-                    alert('Thank you! A thank you message will be sent to ' + email);
-                }
-            }, 2000);
-        } else {
-            alert('Please fill in all fields before submitting.');
-        }
+        }).render('#paypal-button-container'); // Render PayPal button after form submission
     });
 </script>
-
 </body>
 </html>
