@@ -3,101 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Page</title>
+    <title>Payment - Plant a Tree</title>
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Afacad+Flux&display=swap" rel="stylesheet">
     <style>
-        /* Keep your existing CSS styling */
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Afacad Flux', sans-serif;
+            height: 100%;
+            scroll-behavior: smooth;
+            background-color: #f9f9f9;
+            color: black;
+        }
+
+        /* Navbar styles */
+        nav {
+            font-family: 'Homemade Apple', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #004d00;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo {
+            color: #004d00;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Payment Section */
         .payment-section {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 50px;
+            background-image: url('https://media.giphy.com/media/xUA7b4arnbo3THfzi0/giphy.gif?cid=ecf05e47wkn9x8vi1ni032ko5zzeji01t0yhzxhemvv354fj&ep=v1_gifs_search&rid=giphy.gif&ct=g');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.9;
+            min-height: 100vh;
         }
 
         .payment-details {
-            margin: auto;
-            width: 300px;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
-            border: 1px solid #ccc;
             border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
-        label, input {
+        .payment-section h2 {
+            margin-bottom: 20px;
+            color: #004d00;
+            font-family: 'Homemade Apple', cursive;
+            text-align: center;
+        }
+
+        .paypal-button {
             display: block;
-            width: 100%;
-            margin-bottom: 10px;
+            margin: 0 auto;
         }
 
-        button {
+        /* Form Styles */
+        .payment-form input[type="text"],
+        .payment-form input[type="number"],
+        .payment-form input[type="email"] {
             padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            transition: border 0.3s;
         }
 
-        #paypal-button-container {
+        .payment-form input[type="text"]:focus,
+        .payment-form input[type="number"]:focus,
+        .payment-form input[type="email"]:focus {
+            border: 1px solid #004d00;
+        }
+
+        .payment-form button {
+            background-color: #004d00;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px;
+            text-align: center;
+            background-color: #004d00;
+            color: white;
             margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
+<!-- Navbar -->
+<nav>
+    <div class="logo">🌳 Plant a Tree</div>
+    <ul>
+        <li><a href="landingpage.html">Home</a></li>
+        <li><a href="event+treemarker+search.html">Map</a></li>
+        <li><a href="aboutus.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li class="shopping-bag"><a href="pay.html">🛒 Pay for Tree</a></li>
+    </ul>
+</nav>
+
 <!-- Payment Section -->
 <section class="payment-section">
     <div class="payment-details">
         <h2>Payment Details</h2>
-        <form id="payment-form">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="amount">Amount</label>
-            <input type="number" id="amount" name="amount" min="1" required>
-
+        <form class="payment-form" id="paymentForm" onsubmit="return validateForm(event)">
+            <input type="text" id="cardholderName" placeholder="Cardholder Name" required>
+            <input type="text" id="cardNumber" placeholder="Card Number" required>
+            <input type="text" id="expiryDate" placeholder="Expiry Date (MM/YY)" required>
+            <input type="number" id="cvv" placeholder="CVV" required>
+            <input type="email" id="emailInput" placeholder="Email Address" required>
             <button type="submit">Submit Payment</button>
         </form>
-
-        <!-- PayPal Button -->
         <div id="paypal-button-container"></div>
     </div>
 </section>
 
-<!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+<!-- Footer -->
+<footer>
+    © 2024 Plant a Tree. All Rights Reserved.
+</footer>
 
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
 <script>
-    document.getElementById('payment-form').addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent form submission
-        const amount = document.getElementById('amount').value;
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
+    // PayPal buttons configuration
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '10.00' // Set donation amount here
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert('Thank you, ' + details.payer.name.given_name + '! Your donation has been received.');
+                window.location.href = "success.html"; // Redirect to success page after successful payment
+            });
+        }
+    }).render('#paypal-button-container');
 
-        // Display PayPal button after form submission
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: amount // Use the amount entered by the user
-                        }
-                    }]
-                });
-            },
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    // Simulate fireworks and sending email here
-                    alert('Payment completed by ' + details.payer.name.given_name);
+    // Validate form
+    function validateForm(event) {
+        event.preventDefault();
+        var cardholderName = document.getElementById('cardholderName').value;
+        var cardNumber = document.getElementById('cardNumber').value;
+        var expiryDate = document.getElementById('expiryDate').value;
+        var cvv = document.getElementById('cvv').value;
+        var email = document.getElementById('emailInput').value;
 
-                    // Redirect to success page after payment
-                    window.location.href = 'success.html?name=' + name + '&email=' + email;
-                });
-            },
-            onError: function(err) {
-                console.error(err);
-                alert('Payment failed. Please try again.');
-            }
-        }).render('#paypal-button-container'); // Render PayPal button after form submission
-    });
+        if (!cardholderName || !cardNumber || !expiryDate || !cvv || !email) {
+            alert('Please fill out all fields.');
+            return false;
+        }
+
+        // Perform payment processing here, then trigger PayPal
+        paypal.Buttons().render('#paypal-button-container');
+    }
 </script>
+
 </body>
 </html>

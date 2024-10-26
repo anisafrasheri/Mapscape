@@ -1,67 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Success</title>
+    <title>Success - Plant a Tree</title>
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Afacad+Flux&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
     <style>
-        body {
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Afacad Flux', sans-serif;
+            height: 100%;
+            scroll-behavior: smooth;
+            background-color: #f9f9f9;
+            color: black;
+            overflow: hidden;
+        }
+
+        /* Centered Thank You Message */
+        .thank-you-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            padding: 50px;
-        }
-        .fireworks {
-            background-color: #f0f0f0;
-            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
             border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 10; /* Ensure it's on the top layer */
         }
+
+        .thank-you-message h1 {
+            color: #004d00;
+            font-family: 'Homemade Apple', cursive;
+            margin-bottom: 20px;
+        }
+
+        .thank-you-message p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            background-color: #004d00;
+            color: white;
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* Fireworks Animation */
+        canvas {
+            cursor: crosshair;
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Keep it behind other elements */
+        }
+
     </style>
 </head>
-<body>
-<div class="fireworks">
-    <h2>Thank you for your payment!</h2>
-    <p>Your payment was successful.</p>
-    <p>Name: <span id="name"></span></p>
-    <p>Email: <span id="email"></span></p>
 
-    <!-- Simulate fireworks -->
-    <canvas id="fireworksCanvas" width="400" height="300"></canvas>
+<body>
+<!-- Fireworks Canvas -->
+<canvas id="canvas">Canvas is not supported in your browser.</canvas>
+
+<a href="landingpage.html" class="relative px-5 py-3 overflow-hidden font-medium text-gray-600 bg-gray-100 border border-gray-100 rounded-lg shadow-inner group">
+    <span class="absolute top-0 left-0 w-0 h-0 transition-all duration-200 border-t-2 border-gray-600 group-hover:w-full ease"></span>
+    <span class="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 border-gray-600 group-hover:w-full ease"></span>
+    <span class="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-gray-600 group-hover:h-full ease"></span>
+    <span class="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-gray-600 group-hover:h-full ease"></span>
+    <span class="absolute inset-0 w-full h-full duration-300 delay-300 bg-green-900 opacity-0 group-hover:opacity-100"></span>
+    <span class="relative transition-colors duration-300 delay-200 group-hover:text-white ease">Go Back</span>
+</a>
+
+<!-- Thank You Message -->
+<div class="thank-you-message">
+    <h1>Thank You for Your Donation!</h1>
+    <p>Your contribution helps plant more trees and support environmental causes.</p>
+    <p>A confirmation has been sent to your email.</p>
 </div>
 
+<!-- Footer -->
+<footer>
+    © 2024 Plant a Tree. All Rights Reserved.
+</footer>
+
 <script>
-    // Get name and email from query parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const name = urlParams.get('name');
-    const email = urlParams.get('email');
+    // Polyfill for requestAnimationFrame to ensure compatibility across browsers
+    window.requestAnimFrame = (function() {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function(callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
 
-    document.getElementById('name').textContent = name;
-    document.getElementById('email').textContent = email;
+    // Variables for canvas and fireworks
+    var canvas = document.getElementById('canvas'),
+        ctx = canvas.getContext('2d'),
+        cw = window.innerWidth,
+        ch = window.innerHeight,
+        fireworks = [],
+        particles = [],
+        hue = 120,
+        limiterTotal = 5,
+        limiterTick = 0,
+        timerTotal = 80,
+        timerTick = 0,
+        mousedown = false,
+        mx,
+        my;
 
-    // Fireworks simulation (simple canvas animation)
-    function showFireworks() {
-        const canvas = document.getElementById('fireworksCanvas');
-        const ctx = canvas.getContext('2d');
-        let x = canvas.width / 2;
-        let y = canvas.height;
-        let radius = 50;
+    // Set canvas dimensions
+    canvas.width = cw;
+    canvas.height = ch;
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-            ctx.fill();
-
-            if (y > 0) {
-                y -= 2;
-                radius -= 0.5;
-            }
-            requestAnimationFrame(draw);
-        }
-
-        draw();
+    // Helper function to get random number in a range
+    function random(min, max) {
+        return Math.random() * (max - min) + min;
     }
 
-    showFireworks();
+    // Helper function to calculate distance between two points
+    function calculateDistance(p1x, p1y, p2x, p2y) {
+        var xDistance = p1x - p2x,
+            yDistance = p1y - p2y;
+        return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+    }
+
+    // Firework constructor
+    function Firework(sx, sy, tx, ty) {
+        this.x = sx;
+        this.y = sy;
+        this.sx = sx;
+        this.sy = sy;
+        this.tx = tx;
+        this.ty = ty;
+        this.distanceToTarget = calculateDistance(sx, sy, tx, ty);
+        this.distanceTraveled = 0;
+        this.coordinates = [];
+        this.coordinateCount = 3;
+        while (this.coordinateCount--) {
+            this.coordinates.push([this.x, this.y]);
+        }
+        this.angle = Math.atan2(ty - sy, tx - sx);
+        this.speed = 2;
+        this.acceleration = 1.05;
+        this.brightness = random(50, 70);
+        this.targetRadius = 1;
+    }
+
+    // Update firework position
+    Firework.prototype.update = function(index) {
+        this.coordinates.pop();
+        this.coordinates.unshift([this.x, this.y]);
+
+        if (this.targetRadius < 8) {
+            this.targetRadius += 0.3;
+        } else {
+            this.targetRadius = 1;
+        }
+
+        this.speed *= this.acceleration;
+
+        var vx = Math.cos(this.angle) * this.speed,
+            vy = Math.sin(this.angle) * this.speed;
+
+        this.distanceTraveled = calculateDistance(this.sx, this.sy, this.x + vx, this.y + vy);
+
+        if (this.distanceTraveled >= this.distanceToTarget) {
+            createParticles(this.tx, this.ty);
+            fireworks.splice(index, 1);
+        } else {
+            this.x += vx;
+            this.y += vy;
+        }
+    }
+
+    // Draw firework trail
+    Firework.prototype.draw = function() {
+        ctx.beginPath();
+        ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = 'hsl(' + hue + ', 100%, ' + this.brightness + '%)';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(this.tx, this.ty, this.targetRadius, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+
+    // Particle constructor for firework explosion
+    function Particle(x, y) {
+        this.x = x;
+        this.y = y;
+        this.coordinates = [];
+        this.coordinateCount = 5;
+        while (this.coordinateCount--) {
+            this.coordinates.push([this.x, this.y]);
+        }
+        this.angle = random(0, Math.PI * 2);
+        this.speed = random(1, 10);
+        this.friction = 0.95;
+        this.gravity = 1;
+        this.hue = random(hue - 20, hue + 20);
+        this.brightness = random(50, 80);
+        this.alpha = 1;
+        this.decay = random(0.015, 0.03);
+    }
+
+    // Update particle position
+    Particle.prototype.update = function(index) {
+        this.coordinates.pop();
+        this.coordinates.unshift([this.x, this.y]);
+
+        this.speed *= this.friction;
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed + this.gravity;
+        this.alpha -= this.decay;
+
+        if (this.alpha <= this.decay) {
+            particles.splice(index, 1);
+        }
+    }
+
+    // Draw particle trail
+    Particle.prototype.draw = function() {
+        ctx.beginPath();
+        ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
+        ctx.stroke();
+    }
+
+    // Create particle explosion
+    function createParticles(x, y) {
+        var particleCount = 30;
+        while (particleCount--) {
+            particles.push(new Particle(x, y));
+        }
+    }
+
+    // Main animation loop
+    function loop() {
+        requestAnimFrame(loop);
+        hue += 0.5;
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(0, 0, cw, ch);
+
+        ctx.globalCompositeOperation = 'lighter';
+
+        var i = fireworks.length;
+        while (i--) {
+            fireworks[i].draw();
+            fireworks[i].update(i);
+        }
+
+        var j = particles.length;
+        while (j--) {
+            particles[j].draw();
+            particles[j].update(j);
+        }
+
+        if (timerTick >= timerTotal) {
+            if (!mousedown) {
+                fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
+                timerTick = 0;
+            }
+        } else {
+            timerTick++;
+        }
+    }
+
+    // Start the animation loop
+    loop();
+
+    // Mouse down event to trigger fireworks
+    window.addEventListener('mousedown', function(e) {
+        mousedown = true;
+        mx = e.clientX;
+        my = e.clientY;
+        fireworks.push(new Firework(cw / 2, ch, mx, my));
+    });
+
+    // Mouse up event
+    window.addEventListener('mouseup', function() {
+        mousedown = false;
+    });
+
 </script>
 </body>
+
 </html>
