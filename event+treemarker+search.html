@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Map with Tree Markers</title>
     <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Afacad+Flux&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
     <script>
         let map;
         let autocomplete;
@@ -132,55 +133,6 @@
         window.initMap = initMap;
     </script>
     <style>
-        /* General styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            font-family: 'Afacad Flux', sans-serif; /* Ensuring font consistency */
-            scroll-behavior: smooth;
-        }
-
-        /* Navbar styles */
-        nav {
-            font-family: 'Homemade Apple', sans-serif;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: transparent; /* Transparent background */
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: #004d00; /* Dark green color */
-            text-decoration: none;
-            font-size: 20px; /* Larger font size */
-            font-weight: bold; /* Bold text */
-        }
-
-        .logo {
-            color: #004d00; /* Dark green color for the logo */
-            font-size: 28px; /* Larger font size for the logo */
-            font-weight: bold; /* Bold logo text */
-        }
 
         /* Map styles */
         #map {
@@ -297,7 +249,7 @@
         <li><a href="event+treemarker+search.html">Map</a></li>
         <li><a href="aboutus.html">About Us</a></li>
         <li><a href="contact.html">Contact Us</a></li>
-        <li class="shopping-bag"><a href="pay.html">🛒 Pay for Tree</a></li>
+        <li class="shopping-bag"><a href="pay.html">🛒</a></li>
     </ul>
 </nav>
 

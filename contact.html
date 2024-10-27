@@ -5,57 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report a Problem</title>
     <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
     <style>
-        /* General styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            scroll-behavior: smooth;
-            background-color: #f9f9f9;
-        }
-
-        /* Navbar styles */
-        nav {
-            font-family: 'Homemade Apple', sans-serif;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: transparent;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: #004d00;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .logo {
-            color: #004d00;
-            font-size: 28px;
-            font-weight: bold;
-        }
 
         /* Layout styles */
         .container {
@@ -78,7 +30,7 @@
             align-items: center;
             justify-content: center;
             background-color: white;
-            padding: 40px;
+            padding: 50px;
         }
 
         .form-content {
@@ -88,6 +40,8 @@
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            height: 520px;
         }
 
         h2 {
@@ -99,6 +53,7 @@
 
         .form-group {
             margin-bottom: 15px;
+            margin-top: 15px;
         }
 
         .form-group label {
@@ -149,7 +104,7 @@
             }
 
             .form-container {
-                height: 50vh;
+                height: 45vh;
             }
         }
     </style>
@@ -164,7 +119,7 @@
         <li><a href="event+treemarker+search.html">Map</a></li>
         <li><a href="aboutus.html">About Us</a></li>
         <li><a href="contact.html">Contact Us</a></li>
-        <li class="shopping-bag"><a href="pay.html">🛒 Pay for Tree</a></li>
+        <li class="shopping-bag"><a href="pay.html">🛒</a></li>
     </ul>
 </nav>
 
@@ -189,10 +144,6 @@
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number:</label>
-                    <input type="tel" id="phone" name="phone" required>
                 </div>
                 <div class="form-group">
                     <label for="problemDescription">Describe the Problem:</label>
