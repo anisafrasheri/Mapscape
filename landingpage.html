@@ -152,9 +152,10 @@
 
         .address-section {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #e0f7fa;
+            flex-direction: column; /* Stack content vertically */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Align content to the center */
+            background-color: #7db16d;
             padding: 50px 10%;
         }
 
@@ -185,6 +186,40 @@
             cursor: pointer;
         }
 
+        .form-container {
+            width: 100%; /* Ensure the form takes the full width */
+            margin-top: 20px; /* Add space between the heading and form */
+            display: flex;
+            justify-content: center; /* Center form items */
+        }
+
+        .address-form {
+            display: flex;
+            gap: 10px; /* Add spacing between input and button */
+        }
+
+        .address-form input {
+            padding: 10px;
+            width: 300px; /* Set input width */
+        }
+
+        .address-form button {
+            padding: 10px 20px;
+            background-color: #004d00; /* Keep the same button color */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .address-form button:hover {
+            background-color: darkgreen; /* Hover effect */
+        }
+
+        #plant-address1{
+            text-align: left;
+        }
+
         .slideshow {
             position: relative;
             max-width: 50%;
@@ -203,6 +238,72 @@
         }
 
         /* Address Form Section */
+        .address-section-1 {
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Align content to the center */
+            background-color: #7db16d;
+            padding: 50px 10%;
+        }
+
+        .address-section-1 h2 {
+            margin-bottom: 20px;
+            color: #004d00;
+            font-family: 'Homemade Apple', cursive;
+        }
+
+        .address-section-left-1 {
+            width: 50%;
+            text-align: left;
+        }
+
+        .address-section-left-1 p {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .address-section-left-1 button {
+            background-color: #004d00;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container {
+            width: 100%; /* Ensure the form takes the full width */
+            margin-top: 20px; /* Add space between the heading and form */
+            display: flex;
+            justify-content: center; /* Center form items */
+        }
+
+        .address-form-1 {
+            display: flex;
+            gap: 10px; /* Add spacing between input and button */
+        }
+
+        .address-form-1 input {
+            padding: 10px;
+            width: 300px; /* Set input width */
+        }
+
+        .address-form-1 button {
+            padding: 10px 20px;
+            background-color: #004d00; /* Keep the same button color */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .address-form-1 button:hover {
+            background-color: darkgreen; /* Hover effect */
+        }
+
         .address-form {
             text-align: center;
         }
@@ -338,7 +439,7 @@
     <div class="hero-content">
         <h1>Make a Difference, Plant a Tree</h1>
         <button>
-            <a href="pay.html" class="button-link">Donate a Tree</a>
+            <a href="pay.html" class="button-link"><b>Donate a Tree</b></a>
         </button>
 
     </div>
@@ -438,8 +539,8 @@
 
 
 <!-- Address and Slideshow Section -->
-<section class="address-section" id="plant-address1">
-    <div class="address-section-left">
+<section class="address-section-1" id="plant-address1">
+    <div class="address-section-left-1">
         <h2>The World Lost 6.6 Million Hectares of Forest in 2022</h2>
         <p>According to the Forest Declaration Assessment, the world witnessed a staggering loss of 6.6 million hectares of forest cover in 2022. Ninety-six percent of this loss occurred in tropical regions, equating to 4.4 million hectares. The impact of deforestation includes biodiversity decline, rising carbon emissions, and community displacement. Conservation efforts are crucial to reversing these trends.</p>
     </div>
@@ -451,18 +552,21 @@
         <img src="./img/deforest1.png" id="slide2" alt="After reforestation" class="inactive-slide">
     </div>
 
-
-
 </section>
 
 <!-- Address Section: Where to Plant the Tree -->
 <section class="address-section" id="plant-address">
     <h2>Choose a Location to Plant Your Tree</h2>
-    <form class="address-form">
-        <input type="text" placeholder="Enter the address where you would like the tree planted" required>
-        <button type="submit">Submit</button>
-    </form>
+
+    <!-- Wrap the form in a div to ensure it's in a new row -->
+    <div class="form-container">
+        <form class="address-form">
+            <input type="text" placeholder="Enter the address where you would like the tree planted" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </section>
+
 
 <!-- Footer -->
 <footer>
