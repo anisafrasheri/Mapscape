@@ -50,6 +50,12 @@
             font-weight: bold;
         }
 
+        nav a{
+            align-content: center;
+            justify-content: center;
+            vertical-align: center;
+        }
+
         .logo {
             color: #004d00;
             font-size: 28px;
@@ -103,7 +109,7 @@
         }
 
         .hero-content button {
-            background-color: #9fd58b;
+            background-color: #7db16d;
             border: none;
             padding: 15px 30px;
             color: white;
@@ -181,40 +187,19 @@
 
         .slideshow {
             position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: 50%;
+            height: auto;
         }
 
         .slideshow img {
-            width: 100%;
-            display: none;
-            border-radius: 10px;
-            transition: opacity 0.5s ease;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s ease-in-out; /* Smooth transition effect */
+            width: 100%; /* Adjust to your desired width */
         }
 
         .active-slide {
-            display: block;
-        }
-
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 30px;
-            color: #004d00;
-            background-color: white;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .prev {
-            left: 10px;
-        }
-
-        .next {
-            right: 10px;
+            opacity: 1; /* Show the active image */
         }
 
         /* Address Form Section */
@@ -301,16 +286,44 @@
             justify-content: center;
             align-content: center;
             font-family: 'Homemade Apple', cursive;
-            padding-left: 320px;
+            padding-left: 240px;
             color: #004d00;
         }
+
+        .button-link {
+            color: white; /* Make the text white */
+            text-decoration: none; /* Remove the underline */
+        }
+
+        button {
+            background-color: #4CAF50; /* Example button background color */
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button a {
+            color: inherit; /* Inherit the color from the button */
+            font-size: 16px; /* Adjust the text size */
+            font-family: 'Afacad Flux';
+        }
+
+        button:hover {
+            background-color: #45a049; /* Optional: change button color on hover */
+        }
+
+
     </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav>
-    <div class="logo">🌳 Plant a Tree</div>
+    <div class="logo">
+        <img src="../img/tree.png" alt="Tree Icon" style="width: 40px; height: 40px; margin-right: 8px;">
+        Plant a Tree
+    </div>
+
     <ul>
         <li><a href="landingpage.html">Home</a></li>
         <li><a href="event+treemarker+search.html">Map</a></li>
@@ -324,7 +337,10 @@
 <section class="hero-banner" id="home">
     <div class="hero-content">
         <h1>Make a Difference, Plant a Tree</h1>
-        <button><a href="pay.html">Donate a Tree</a></button>
+        <button>
+            <a href="pay.html" class="button-link">Donate a Tree</a>
+        </button>
+
     </div>
 </section>
 
@@ -429,15 +445,14 @@
     </div>
     <div class="slideshow">
         <!-- Image 1 -->
-        <img src="./img/forest.jpg" id="slide1" alt="Before deforestation" class="active-slide">
+        <img src="./img/forest1.png" id="slide1" alt="Before deforestation" class="active-slide">
 
-        <!-- Image 2 (Initially hidden) -->
-        <img src="./img/deforestation.jpg" id="slide2" alt="After reforestation" class="inactive-slide">
-
-        <!-- Slideshow buttons -->
-        <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
-        <button class="next" onclick="changeSlide(1)">&#10095;</button>
+        <!-- Image 2 -->
+        <img src="./img/deforest1.png" id="slide2" alt="After reforestation" class="inactive-slide">
     </div>
+
+
+
 </section>
 
 <!-- Address Section: Where to Plant the Tree -->
@@ -467,42 +482,37 @@
         }
     });
 
-    let slideIndex = 0;
-    const slides = [
-        "https://example.com/before.jpg",
-        "https://example.com/after.jpg",
-        "https://example.com/forest-recovery.jpg"
-    ];
-
-    function changeSlide(direction) {
-        slideIndex += direction;
-        if (slideIndex < 0) {
-            slideIndex = slides.length - 1;
-        } else if (slideIndex >= slides.length) {
-            slideIndex = 0;
-        }
-        document.getElementById("slide").src = slides[slideIndex];
-    }
     let currentSlide = 1;
 
-    // Function to change slides
-    function changeSlide(direction) {
-        // Hide the current slide
-        document.getElementById(`slide${currentSlide}`).classList.remove('active-slide');
-        document.getElementById(`slide${currentSlide}`).classList.add('inactive-slide');
+    function showSlide(n) {
+        let slides = document.querySelectorAll('.slideshow img');
 
-        // Calculate the next slide
-        currentSlide += direction;
-        if (currentSlide < 1) {
-            currentSlide = 2; // Go to the last slide if going backwards from the first
-        } else if (currentSlide > 2) {
-            currentSlide = 1; // Go to the first slide if advancing past the last
+        // Wrap around slide numbers
+        if (n > slides.length) {
+            currentSlide = 1;
+        } else if (n < 1) {
+            currentSlide = slides.length;
         }
 
-        // Show the next slide
-        document.getElementById(`slide${currentSlide}`).classList.remove('inactive-slide');
-        document.getElementById(`slide${currentSlide}`).classList.add('active-slide');
+        // Hide all slides (set opacity to 0)
+        slides.forEach(slide => {
+            slide.classList.remove('active-slide'); // Remove the active class from all
+        });
+
+        // Show the current slide (set opacity to 1)
+        slides[currentSlide - 1].classList.add('active-slide');
     }
+
+    // Automatically change slides every 3 seconds
+    setInterval(() => {
+        currentSlide++;
+        showSlide(currentSlide);
+    }, 3000);
+
+    // Show the first slide on page load
+    showSlide(currentSlide);
+
+
     // Initialize the total trees planted
     let totalTreesPlanted = 0;
     const totalTreeGoal = 1000; // Define your overall goal (e.g., 1000 trees)
