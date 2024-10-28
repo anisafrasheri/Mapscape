@@ -103,6 +103,14 @@
                 viewButton.textContent = 'View';
                 viewButton.classList.add('view-btn');
 
+                // Attach click event listener to the view button
+                viewButton.addEventListener('click', () => {
+                    // Redirect to index.html with marker's lat and lng as query parameters
+                    const lat = marker.getPosition().lat();
+                    const lng = marker.getPosition().lng();
+                    window.location.href = `index.html?lat=${lat}&lng=${lng}`;
+                });
+
                 // Create the remove button
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Remove';
@@ -129,6 +137,7 @@
             // Show or hide the donate button based on the number of markers
             donateButton.style.display = markers.length > 0 ? 'block' : 'none';
         }
+
 
         window.initMap = initMap;
     </script>
@@ -253,20 +262,26 @@
     </ul>
 </nav>
 
+<!-- Form for address input -->
 <form>
     <label for="ship-address">Enter address:</label>
     <input type="text" id="ship-address" name="ship-address">
 </form>
 
+<!-- Map and Address Box -->
 <div id="map"></div>
 <div id="address-box">
     <h2>Your tree address:</h2>
     <ul id="address-list"></ul>
-    <button id="donate-button" class="donate-button"><a href="pay.html">Donate</a></button>
+    <button id="donate-button" class="donate-button"><a href="pay.html"> Donate and Plant More Trees</a></button>
 </div>
 
-<!-- Add your Google Maps API Key in the script below -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places&callback=initMap"
-        async defer></script>
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Plant a Tree - Make a Difference</p>
+</footer>
+
+<!-- Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>
