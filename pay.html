@@ -103,6 +103,25 @@
         <form class="payment-form" id="paymentForm" onsubmit="return validateForm(event)">
             <!-- Number of Trees Input -->
             <input type="number" id="numTrees" placeholder="Number of Trees" min="1" required oninput="calculateTotal()">
+            <!-- Assuming you have an input field for the number of trees like this -->
+
+            <input type="number" id="number-of-trees" name="number_of_trees" value="1">
+
+            <script>
+                // Retrieve the number of trees from localStorage
+                let numberOfTrees = localStorage.getItem('numberOfTrees');
+
+                // Log the number of trees for debugging
+                console.log('Number of trees from localStorage:', numberOfTrees);
+
+                // If the 'numberOfTrees' exists and is a valid number, pre-fill the input field
+                if (numberOfTrees && !isNaN(numberOfTrees)) {
+                    document.getElementById('number-of-trees').value = numberOfTrees;
+                } else {
+                    console.log('No valid "numberOfTrees" found, defaulting to 1 tree');
+                }
+            </script>
+
 
             <!-- Total Price Display -->
             <div class="total-price" id="totalPrice">Total Price: $0</div>
@@ -184,7 +203,27 @@
             body.classList.remove('scrolled');
         }
     });
-</script>
 
+
+</script>
+<script>
+    // Set a flag in localStorage to indicate that the payment page has been visited
+    localStorage.setItem('paymentVisited', 'true');
+</script>
+<script>
+    // Function to retrieve query parameters from the URL
+    function getQueryParam(param) {
+        let urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Get the 'trees' parameter from the URL
+    let numberOfTrees = getQueryParam('trees');
+
+    // If the 'trees' parameter exists, pre-fill the number of trees field
+    if (numberOfTrees) {
+        document.getElementById('numTrees').value = numberOfTrees;
+    }
+</script>
 </body>
 </html>

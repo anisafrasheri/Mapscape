@@ -72,7 +72,7 @@
         }
 
         function addTreeMarker(location, address) {
-            const marker = new google.maps.Marker({
+            const marker = new google.maps.AdvancedMarkerElement({
                 position: location,
                 map: map,
                 title: "Tree",
@@ -91,7 +91,7 @@
 
         function updateAddressList() {
             const addressList = document.getElementById('address-list');
-            const donateButton = document.getElementById('donate-button');
+            const donateButton = document.getElementById('donate-trees-button');
             addressList.innerHTML = ''; // Clear the list
 
             markers.forEach(({ marker, address }, index) => {
@@ -274,7 +274,33 @@
 <div id="address-box">
     <h2>Your tree address:</h2>
     <ul id="address-list"></ul>
-    <button id="donate-button" class="donate-button"><a href="pay.html"> Donate and Plant More Trees</a></button>
+    <!-- event+treemarker+search.html -->
+    <button id="donate-trees-button" class="donate-button"><a href="pay.html"> Donate Trees</a></button>
+
+    <script>
+        document.getElementById('donate-trees-button').addEventListener('click', function () {
+            // Replace this with your actual method of getting the number of markers
+            let numberOfTrees = getNumberOfMarkers();
+
+            // Log the number of trees for debugging
+            console.log('Number of trees before redirect:', numberOfTrees);
+
+            // Store the number of trees in localStorage
+            localStorage.setItem('numberOfTrees', numberOfTrees);
+
+            // Redirect to pay.html
+            window.location.href = 'pay.html';
+        });
+
+        function getNumberOfMarkers() {
+            // This should return the actual number of markers placed on the map
+            // For example, if using a map object, return the markers length
+            return map.markers.length; // Replace with your own logic
+        }
+    </script>
+
+
+
 </div>
 
 <!-- Footer -->
@@ -283,6 +309,9 @@
 </footer>
 
 <!-- Google Maps API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places&callback=initMap" async defer></script>
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places&callback=initMap" async defer></script>-->
+<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places&callback=initMap"></script>-->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places&v=beta&callback=initMap"></script>
+
 </body>
 </html>

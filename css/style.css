@@ -400,8 +400,10 @@ footer {
     justify-content: center;
     align-content: center;
     font-family: 'MyCustomFont', cursive;
-    padding-left: 240px;
+    padding-left: 380px;
     color: #004d00;
+    padding-bottom: 15px;
+    padding-top: 15px;
 }
 
 .button-link {
