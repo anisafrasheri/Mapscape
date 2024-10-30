@@ -35,12 +35,6 @@
             text-align: center;
         }
 
-        .paypal-button {
-            display: block;
-            margin: 0 auto;
-        }
-
-        /* Form Styles */
         .payment-form input[type="text"],
         .payment-form input[type="number"],
         .payment-form input[type="email"] {
@@ -103,25 +97,6 @@
         <form class="payment-form" id="paymentForm" onsubmit="return validateForm(event)">
             <!-- Number of Trees Input -->
             <input type="number" id="numTrees" placeholder="Number of Trees" min="1" required oninput="calculateTotal()">
-            <!-- Assuming you have an input field for the number of trees like this -->
-
-            <input type="number" id="number-of-trees" name="number_of_trees" value="1">
-
-            <script>
-                // Retrieve the number of trees from localStorage
-                let numberOfTrees = localStorage.getItem('numberOfTrees');
-
-                // Log the number of trees for debugging
-                console.log('Number of trees from localStorage:', numberOfTrees);
-
-                // If the 'numberOfTrees' exists and is a valid number, pre-fill the input field
-                if (numberOfTrees && !isNaN(numberOfTrees)) {
-                    document.getElementById('number-of-trees').value = numberOfTrees;
-                } else {
-                    console.log('No valid "numberOfTrees" found, defaulting to 1 tree');
-                }
-            </script>
-
 
             <!-- Total Price Display -->
             <div class="total-price" id="totalPrice">Total Price: $0</div>
@@ -145,7 +120,7 @@
 
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
 <script>
-    const treePrice = 50; // Cost of one tree
+    const treePrice = 10; // Cost of one tree
 
     // Function to calculate total price
     function calculateTotal() {
@@ -193,36 +168,19 @@
         paypal.Buttons().render('#paypal-button-container');
     }
 
-    window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('nav');
-        const body = document.body;
-
-        if (window.scrollY > 100) {  // When user scrolls down 100px from the top
-            body.classList.add('scrolled');
-        } else {
-            body.classList.remove('scrolled');
-        }
-    });
-
-
-</script>
-<script>
-    // Set a flag in localStorage to indicate that the payment page has been visited
-    localStorage.setItem('paymentVisited', 'true');
-</script>
-<script>
-    // Function to retrieve query parameters from the URL
+    // Retrieve 'trees' parameter from the URL and pre-fill the number of trees field
     function getQueryParam(param) {
-        let urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     }
 
     // Get the 'trees' parameter from the URL
-    let numberOfTrees = getQueryParam('trees');
+    const numberOfTrees = getQueryParam('trees');
 
     // If the 'trees' parameter exists, pre-fill the number of trees field
     if (numberOfTrees) {
         document.getElementById('numTrees').value = numberOfTrees;
+        calculateTotal(); // Update total price based on the number of trees
     }
 </script>
 </body>
