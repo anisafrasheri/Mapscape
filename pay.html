@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment - Plant a Tree</title>
-    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Afacad+Flux&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
     <style>
         /* Payment Section */
@@ -72,11 +72,18 @@
             margin: 0 auto;
         }
 
+        /* Total Price Style */
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
-<!-- Navbar (same as previous) -->
+<!-- Navbar -->
 <nav>
     <div class="logo"><img src="img/image.png" style="height: 60px"></div>
     <ul>
@@ -94,6 +101,13 @@
     <div class="payment-details">
         <h2>Payment Details</h2>
         <form class="payment-form" id="paymentForm" onsubmit="return validateForm(event)">
+            <!-- Number of Trees Input -->
+            <input type="number" id="numTrees" placeholder="Number of Trees" min="1" required oninput="calculateTotal()">
+
+            <!-- Total Price Display -->
+            <div class="total-price" id="totalPrice">Total Price: $0</div>
+
+            <!-- Cardholder Information -->
             <input type="text" id="cardholderName" placeholder="Cardholder Name" required>
             <input type="text" id="cardNumber" placeholder="Card Number" required>
             <input type="text" id="expiryDate" placeholder="Expiry Date (MM/YY)" required>
@@ -112,13 +126,24 @@
 
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
 <script>
+    const treePrice = 50; // Cost of one tree
+
+    // Function to calculate total price
+    function calculateTotal() {
+        const numTrees = document.getElementById('numTrees').value || 0;
+        const total = numTrees * treePrice;
+        document.getElementById('totalPrice').textContent = 'Total Price: $' + total;
+    }
+
     // PayPal buttons configuration
     paypal.Buttons({
         createOrder: function(data, actions) {
+            const numTrees = document.getElementById('numTrees').value || 1;
+            const total = numTrees * treePrice;
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: '10.00' // Set donation amount here
+                        value: total.toFixed(2) // Set donation amount here based on the total price
                     }
                 }]
             });
@@ -148,6 +173,17 @@
         // Perform payment processing here, then trigger PayPal
         paypal.Buttons().render('#paypal-button-container');
     }
+
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('nav');
+        const body = document.body;
+
+        if (window.scrollY > 100) {  // When user scrolls down 100px from the top
+            body.classList.add('scrolled');
+        } else {
+            body.classList.remove('scrolled');
+        }
+    });
 </script>
 
 </body>
