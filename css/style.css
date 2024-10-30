@@ -400,7 +400,7 @@ footer {
     justify-content: center;
     align-content: center;
     font-family: 'MyCustomFont', cursive;
-    padding-left: 380px;
+    padding-left: 35%;
     color: #004d00;
     padding-bottom: 15px;
     padding-top: 15px;
@@ -558,7 +558,7 @@ tr:nth-child(even) {
 
 /* Style for the images */
 .slideshow img {
-    max-width: 83%;
+    max-width: 50%;
     height: auto;
     position: absolute;
     transition: opacity 0.5s ease;
