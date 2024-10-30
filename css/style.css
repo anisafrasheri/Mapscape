@@ -214,25 +214,6 @@ section {
     text-align: left;
 }
 
-.slideshow {
-    position: relative;
-    max-width: 50%;
-    height: auto;
-}
-
-.slideshow img {
-    position: absolute;
-    opacity: 0;
-    transition: opacity 1s ease-in-out; /* Smooth transition effect */
-    width: 100%; /* Adjust to your desired width */
-}
-
-.active-slide {
-    opacity: 1; /* Show the active image */
-}
-
-/* Address Form Section */
-
 /* Container for the section */
 .address-section-1 {
     display: flex; /* Flexbox layout */
@@ -243,26 +224,19 @@ section {
 }
 
 /* Left-side text */
-.address-section-left-1 {
-    flex: 1; /* Takes up available space on the left */
-}
+/* Add this to your existing CSS file */
 
-/* Slideshow on the right */
-.slideshow {
-    flex: 1; /* Takes up available space on the right */
+/* Add Flexbox layout to the section containing text and slideshow */
+.address-section-1 {
     display: flex;
-    justify-content: center; /* Center the slideshow images */
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 }
 
-.slideshow img {
-    max-width: 100%; /* Ensures images do not overflow */
-    height: auto;
-    display: none; /* Hide all images initially */
-}
-
-/* Show active slide */
-.slideshow .active-slide {
-    display: block;
+/* Ensure the left section takes 50% of the width */
+.address-section-left-1 {
+    flex: 1;
 }
 
 /* Optional styling for the text */
@@ -555,3 +529,48 @@ tr:nth-child(even) {
     font-weight: normal;
     font-style: normal;
 }
+
+/* Flexbox layout for the section to align text and slideshow side by side */
+.address-section-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+/* Style for the left section containing the text */
+.address-section-left-1 {
+    flex: 1;
+}
+
+/* Style for the slideshow container */
+.slideshow {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 50%; /* To prevent overflow */
+    position: relative;
+}
+
+/* Style for the images */
+.slideshow img {
+    max-width: 83%;
+    height: auto;
+    position: absolute;
+    transition: opacity 0.5s ease;
+}
+
+/* Active slide styling */
+.active-slide {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* Inactive slide styling */
+.inactive-slide {
+    opacity: 0;
+    z-index: 1;
+}
+
