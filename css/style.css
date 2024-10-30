@@ -15,7 +15,7 @@ body, html {
 
 /* Navbar styles */
 nav {
-    font-family: 'Homemade Apple', sans-serif;
+    font-family: 'MyCustomFont', sans-serif;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -61,7 +61,7 @@ nav a{
     border-radius: 10px;
     cursor: pointer;
     border: 2px solid #004d00;
-    height: 45px;
+    height: 35px;
     width: 35px;
 }
 
@@ -99,7 +99,7 @@ nav a{
 .hero-content h1 {
     font-size: 48px;
     margin-bottom: 20px;
-    font-family: 'Homemade Apple', cursive;
+    font-family: 'MyCustomFont', cursive;
 }
 
 .hero-content button {
@@ -134,7 +134,7 @@ section {
 .section-info h2 {
     margin-bottom: 20px;
     color: #004d00;
-    font-family: 'Homemade Apple', cursive;
+    font-family: 'MyCustomFont', cursive;
 }
 
 .section-info p {
@@ -156,7 +156,7 @@ section {
 .address-section h2 {
     margin-bottom: 20px;
     color: #004d00;
-    font-family: 'Homemade Apple', cursive;
+    font-family: 'MyCustomFont', cursive;
 }
 
 .address-section-left {
@@ -288,7 +288,7 @@ section {
 .address-section h2 {
     margin-bottom: 20px;
     color: #004d00;
-    font-family: 'Homemade Apple', cursive;
+    font-family: 'MyCustomFont', cursive;
 }
 
 .address-section-left {
@@ -425,7 +425,7 @@ footer {
 #progress-text{
     justify-content: center;
     align-content: center;
-    font-family: 'Homemade Apple', cursive;
+    font-family: 'MyCustomFont', cursive;
     padding-left: 240px;
     color: #004d00;
 }
@@ -500,7 +500,7 @@ tr:nth-child(even) {
     font-size: 30px;
     margin-bottom: 15px;
     color: #004d00; /* Dark green */
-    font-family: 'Homemade Apple', cursive; /* Applying Londrina Sketch to headers */
+    font-family: 'MyCustomFont', cursive; /* Applying Londrina Sketch to headers */
 }
 
 .about-us-column p {
@@ -549,3 +549,9 @@ tr:nth-child(even) {
     transition: all 0.3s;
 }
 
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('../fonts/ChicagoMakers-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
