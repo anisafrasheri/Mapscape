@@ -15,8 +15,9 @@
         function loadGoogleMapsAPI() {
             const script = document.createElement('script');
             script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places,marker&v=beta';
-            script.async = true;
-            script.defer = true; // Ensure the script executes after the document is parsed
+            script.src ='https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places,marker&v=beta';
+    script.async = true;
+    script.defer = true; // Ensure the script executes after the document is parsed
 
             // When the script loads, initialize the map
             script.onload = initMap;
@@ -139,6 +140,29 @@
 
         // Load Google Maps API after the document is fully loaded
         window.onload = loadGoogleMapsAPI;
+
+        function geocodeLatLng(latLng) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: latLng }, (results, status) => {
+                if (status === "OK" && results[0]) {
+                    const address = results[0].formatted_address;
+                    const locationType = results[0].types[0]; // Access location type (e.g., "locality", "ocean")
+
+                    if (isSuitableLocation(locationType)) {
+                        addTreeMarker(latLng, address);  // Add marker only if suitable
+                    } else {
+                        alert("Sorry, planting trees in " + locationType + " is not recommended.");
+                    }
+                } else {
+                    console.error("Geocode was not successful: " + status);
+                }
+            });
+        }
+        function isSuitableLocation(locationType) {
+            // Define allowed location types (e.g., "locality", "park")
+            const allowedTypes = ["locality", "park", "administrative_area_level_2"];
+            return allowedTypes.includes(locationType);
+        }
     </script>
     <style>
         #map {
