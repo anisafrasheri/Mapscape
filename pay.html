@@ -82,7 +82,7 @@
     <div class="logo"><img src="img/image.png" style="height: 60px"></div>
     <ul>
         <li><a href="landingpage.html">Home</a></li>
-        <li><a href="event+treemarker+search.html">Map</a></li>
+        <li><a href="map.html">Map</a></li>
         <li><a href="aboutus.html">About Us</a></li>
         <li><a href="contact.html">Contact Us</a></li>
         <li class="shopping-bag"><a href="pay.html">🛒</a></li>
@@ -119,69 +119,7 @@
 </footer>
 
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
-<script>
-    const treePrice = 10; // Cost of one tree
-
-    // Function to calculate total price
-    function calculateTotal() {
-        const numTrees = document.getElementById('numTrees').value || 0;
-        const total = numTrees * treePrice;
-        document.getElementById('totalPrice').textContent = 'Total Price: $' + total;
-    }
-
-    // PayPal buttons configuration
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            const numTrees = document.getElementById('numTrees').value || 1;
-            const total = numTrees * treePrice;
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: total.toFixed(2) // Set donation amount here based on the total price
-                    }
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                alert('Thank you, ' + details.payer.name.given_name + '! Your donation has been received.');
-                window.location.href = "success.html"; // Redirect to success page after successful payment
-            });
-        }
-    }).render('#paypal-button-container');
-
-    // Validate form
-    function validateForm(event) {
-        event.preventDefault();
-        var cardholderName = document.getElementById('cardholderName').value;
-        var cardNumber = document.getElementById('cardNumber').value;
-        var expiryDate = document.getElementById('expiryDate').value;
-        var cvv = document.getElementById('cvv').value;
-        var email = document.getElementById('emailInput').value;
-
-        if (!cardholderName || !cardNumber || !expiryDate || !cvv || !email) {
-            alert('Please fill out all fields.');
-            return false;
-        }
-
-        // Perform payment processing here, then trigger PayPal
-        paypal.Buttons().render('#paypal-button-container');
-    }
-
-    // Retrieve 'trees' parameter from the URL and pre-fill the number of trees field
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
-
-    // Get the 'trees' parameter from the URL
-    const numberOfTrees = getQueryParam('trees');
-
-    // If the 'trees' parameter exists, pre-fill the number of trees field
-    if (numberOfTrees) {
-        document.getElementById('numTrees').value = numberOfTrees;
-        calculateTotal(); // Update total price based on the number of trees
-    }
+<script src="./js/javascript.js">
 </script>
 </body>
 </html>

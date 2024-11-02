@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Tree Markers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/javascript.js">
+    </script>
+    <style>
+        #map {
+            height: calc(100% - 70px - 140px);
+            width: 70%;
+            float: left;
+        }
+
+        #address-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30%;
+            height: calc(100% - 70px - 140px);
+            float: right;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        #address-box h2 {
+            font-family: 'Homemade Apple', sans-serif;
+            color: #004d00;
+            margin-bottom: 15px;
+        }
+
+        #address-list {
+            list-style-type: none;
+            padding-left: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        #address-list li {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-btn {
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .view-btn {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        .donate-button {
+            display: none;
+            background-color: #7db16d;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            max-width: 600px;
+            padding: 10px;
+            margin: 10px auto;
+            background-color: Transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="logo"><img src="img/image.png" style="height: 60px"></div>
+    <ul>
+        <li><a href="landingpage.html">Home</a></li>
+        <li><a href="map.html">Map</a></li>
+        <li><a href="aboutus.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li class="shopping-bag"><a href="pay.html">🛒</a></li>
+        <li><a href="#">Sign In</a></li>
+    </ul>
+</nav>
+
+<form>
+    <label for="ship-address">Enter address:</label>
+    <input type="text" id="ship-address" name="ship-address">
+</form>
+
+<div id="map"></div>
+
+<div id="address-box">
+    <h2>Your Tree Locations</h2>
+    <ul id="address-list"></ul>
+    <a id="donate-trees-button" class="donate-button" href="pay.html">Donate Trees</a>
+</div>
+<script>
+        // Initialize an array to store selected trees
+        let selectedTrees = [];
+
+        // Function to add a tree to the list
+        function addTreeToList(treeName, treeLocation) {
+        // Create a new list item
+        const treeItem = document.createElement('li');
+        treeItem.textContent = `${treeName} (${treeLocation})`;
+
+        // Add a remove button for the tree
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.classList.add('remove-btn');
+        removeBtn.onclick = function() {
+        removeTreeFromList(treeItem, treeName, treeLocation);
+    };
+
+        treeItem.appendChild(removeBtn);
+
+        // Add the list item to the address list
+        document.getElementById('address-list').appendChild(treeItem);
+
+        // Store the tree in the selectedTrees array
+        selectedTrees.push({name: treeName, location: treeLocation});
+
+        // Show the donate button when trees are added
+        document.getElementById('donate-trees-button').style.display = 'block';
+    }
+
+        // Function to remove a tree from the list
+        function removeTreeFromList(treeItem, treeName, treeLocation) {
+        // Remove the tree from the list visually
+        document.getElementById('address-list').removeChild(treeItem);
+
+        // Remove the tree from the selectedTrees array
+        selectedTrees = selectedTrees.filter(tree => tree.name !== treeName || tree.location !== treeLocation);
+
+        // Hide the donate button if no trees are left
+        if (selectedTrees.length === 0) {
+        document.getElementById('donate-trees-button').style.display = 'none';
+    }
+    }
+
+        // Example function to handle a tree marker being added to the map
+        function onTreeMarkerAdded(treeName, treeLocation) {
+        addTreeToList(treeName, treeLocation);
+    }
+
+        // Capture the selected trees when the user clicks the "Donate Trees" button
+        document.getElementById('donate-trees-button').addEventListener('click', function() {
+        localStorage.setItem('selectedTrees', JSON.stringify(selectedTrees));
+        window.location.href = 'pay.html';  // Redirect to payment page
+    });
+</script>
+</body>
+</html>
