@@ -507,3 +507,58 @@ function updateAddressList() {
 
 // Load Google Maps API after the document is fully loaded
 window.onload = loadGoogleMapsAPI;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+document.getElementById('donate-trees-button').addEventListener('click', function() {
+    const addressList = document.querySelectorAll('#address-list li');
+    addressList.forEach(address => {
+        const addressText = address.innerText;
+
+        fetch('/submitOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                address: addressText,
+                num_trees: 1 // Or get the actual number of trees if needed
+            }),
+        })
+            .then(response => response.json())
+            .then(data => console.log('Order submitted with ID:', data.order_id))
+            .catch(error => console.error('Error:', error));
+    });
+});
+
+document.getElementById('paymentForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const cardholderName = document.getElementById('cardholderName').value;
+    const cardNumber = document.getElementById('cardNumber').value;
+    const expiryDate = document.getElementById('expiryDate').value;
+    const cvv = document.getElementById('cvv').value;
+    const email = document.getElementById('emailInput').value;
+    const totalPrice = document.getElementById('totalPrice').innerText.replace('Total Price: $', '');
+    const orderId = 1;  // Get the actual order ID from your logic
+
+    fetch('/submitPayment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            cardholder_name: cardholderName,
+            card_number: cardNumber,
+            expiry_date: expiryDate,
+            cvv: cvv,
+            email: email,
+            total_price: totalPrice,
+            order_id: orderId
+        }),
+    })
+        .then(response => response.json())
+        .then(data => console.log('Payment submitted with ID:', data.payment_id))
+        .catch(error => console.error('Error:', error));
+});
