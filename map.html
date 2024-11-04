@@ -6,7 +6,154 @@
     <title>Interactive Map with Tree Markers</title>
     <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./js/javascript.js">
+    <script>
+        let map;
+        let autocomplete;
+        let markers = []; // Array to store tree markers and addresses
+
+        // Function to load the Google Maps JavaScript API asynchronously
+        function loadGoogleMapsAPI() {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places,marker&v=beta';
+            script.async = true;
+            script.defer = true; // Ensure the script executes after the document is parsed
+
+            // When the script loads, initialize the map
+            script.onload = initMap;
+
+            document.head.appendChild(script);
+        }
+
+        function initMap() {
+            const initialLatLng = { lat: -33.9, lng: 151.2 };
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: initialLatLng,
+                mapId: "b047284208cd25e3", // Set your Map ID here
+            });
+
+            // Initialize the autocomplete functionality
+            initAutocomplete();
+
+            // Add a click listener to add tree markers
+            map.addListener("click", (event) => {
+                geocodeLatLng(event.latLng);
+            });
+        }
+
+        function initAutocomplete() {
+            const addressField = document.querySelector("#ship-address");
+
+            // Create the autocomplete object
+            autocomplete = new google.maps.places.Autocomplete(addressField, {
+                componentRestrictions: { country: ["us", "ca"] },
+                fields: ["address_components", "geometry"],
+                types: ["address"],
+            });
+
+            // When the user selects an address from the drop-down, populate the address fields
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+
+        function fillInAddress() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+                alert("No details available for the selected address.");
+                return;
+            }
+
+            const location = place.geometry.location;
+
+            // Add a tree marker at the selected address using AdvancedMarkerElement
+            geocodeLatLng(location); // Check if the location is suitable before adding the marker
+
+            map.setCenter(location);
+            map.setZoom(15);
+        }
+
+        function geocodeLatLng(latLng) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: latLng }, (results, status) => {
+                if (status === "OK" && results[0]) {
+                    const address = results[0].formatted_address;
+                    const locationTypes = results[0].types; // Get all location types (e.g., "locality", "park")
+
+                    if (isGreenArea(locationTypes)) {
+                        addTreeMarker(latLng, address);  // Add marker only if in a green zone
+                    } else {
+                        alert("Tree planting is restricted in this area. Please plant trees in designated green zones like parks.");
+                    }
+                } else {
+                    console.error("Geocode was not successful: " + status);
+                }
+            });
+        }
+
+        function isGreenArea(locationTypes) {
+            // Define allowed location types where planting trees is encouraged
+            const allowedTypes = ["park", "natural_feature"];
+
+            // Check if any of the location types match allowed types
+            return locationTypes.some(type => allowedTypes.includes(type));
+        }
+
+        function addTreeMarker(location, address) {
+            const markerElement = document.createElement("div");
+            markerElement.innerHTML = `<img src="https://img.icons8.com/color/48/deciduous-tree.png" alt="Tree Icon" style="width: 50px; height: 50px;">`;
+
+            const marker = new google.maps.marker.AdvancedMarkerElement({
+                position: location,
+                map: map,
+                title: "Tree",
+                content: markerElement,
+            });
+
+            markers.push({ marker, address });
+            updateAddressList();
+        }
+
+        function updateAddressList() {
+            const addressList = document.getElementById('address-list');
+            const donateButton = document.getElementById('donate-trees-button');
+            addressList.innerHTML = '';
+
+            markers.forEach(({ marker, address }, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = address;
+
+                const viewButton = document.createElement('button');
+                viewButton.textContent = 'View';
+                viewButton.classList.add('view-btn');
+
+                viewButton.addEventListener('click', () => {
+                    const lat = marker.position.lat();
+                    const lng = marker.position.lng();
+                    window.location.href = `index.html?lat=${lat}&lng=${lng}`;
+                });
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.classList.add('remove-btn');
+
+                removeButton.addEventListener('click', () => {
+                    marker.map = null;
+                    markers.splice(index, 1);
+                    updateAddressList();
+                });
+
+                listItem.appendChild(viewButton);
+                listItem.appendChild(removeButton);
+                addressList.appendChild(listItem);
+            });
+
+            // Set URL parameter to include number of trees
+            const treeCount = markers.length;
+            donateButton.href = `pay.html?trees=${treeCount}`;
+            donateButton.style.display = treeCount > 0 ? 'block' : 'none';
+        }
+
+        // Load Google Maps API after the document is fully loaded
+        window.onload = loadGoogleMapsAPI;
     </script>
     <style>
         #map {
@@ -129,64 +276,14 @@
 <div id="map"></div>
 
 <div id="address-box">
-    <h2>Your Tree Locations</h2>
+    <h2>Tree Planting Locations</h2>
     <ul id="address-list"></ul>
-    <a id="donate-trees-button" class="donate-button" href="pay.html">Donate Trees</a>
+    <a href="pay.html" id="donate-trees-button" class="donate-button">Donate Trees</a>
 </div>
-<script>
-        // Initialize an array to store selected trees
-        let selectedTrees = [];
 
-        // Function to add a tree to the list
-        function addTreeToList(treeName, treeLocation) {
-        // Create a new list item
-        const treeItem = document.createElement('li');
-        treeItem.textContent = `${treeName} (${treeLocation})`;
+<footer>
+    <p>&copy; 2023 Tree Planting Project. All rights reserved.</p>
+</footer>
 
-        // Add a remove button for the tree
-        const removeBtn = document.createElement('button');
-        removeBtn.textContent = 'Remove';
-        removeBtn.classList.add('remove-btn');
-        removeBtn.onclick = function() {
-        removeTreeFromList(treeItem, treeName, treeLocation);
-    };
-
-        treeItem.appendChild(removeBtn);
-
-        // Add the list item to the address list
-        document.getElementById('address-list').appendChild(treeItem);
-
-        // Store the tree in the selectedTrees array
-        selectedTrees.push({name: treeName, location: treeLocation});
-
-        // Show the donate button when trees are added
-        document.getElementById('donate-trees-button').style.display = 'block';
-    }
-
-        // Function to remove a tree from the list
-        function removeTreeFromList(treeItem, treeName, treeLocation) {
-        // Remove the tree from the list visually
-        document.getElementById('address-list').removeChild(treeItem);
-
-        // Remove the tree from the selectedTrees array
-        selectedTrees = selectedTrees.filter(tree => tree.name !== treeName || tree.location !== treeLocation);
-
-        // Hide the donate button if no trees are left
-        if (selectedTrees.length === 0) {
-        document.getElementById('donate-trees-button').style.display = 'none';
-    }
-    }
-
-        // Example function to handle a tree marker being added to the map
-        function onTreeMarkerAdded(treeName, treeLocation) {
-        addTreeToList(treeName, treeLocation);
-    }
-
-        // Capture the selected trees when the user clicks the "Donate Trees" button
-        document.getElementById('donate-trees-button').addEventListener('click', function() {
-        localStorage.setItem('selectedTrees', JSON.stringify(selectedTrees));
-        window.location.href = 'pay.html';  // Redirect to payment page
-    });
-</script>
 </body>
 </html>
