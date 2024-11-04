@@ -74,6 +74,7 @@
             margin-bottom: 20px;
         }
     </style>
+    <script src="server.js"></script>
 </head>
 <body>
 
@@ -119,7 +120,27 @@
 </footer>
 
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
-<script src="./js/javascript.js">
+<script src="./js/javascript.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        fetch('http://localhost:3000/api/latest-donation') // Fetch the latest donation data
+            .then(response => response.json())
+            .then(data => {
+                const numTrees = data.trees || 0; // Use the trees count from the latest donation
+                document.getElementById('numTrees').value = numTrees; // Set this value in the input field
+                calculateTotal(); // Call function to calculate total based on number of trees
+            })
+            .catch(error => console.error('Error fetching donation:', error));
+    });
+
+        // Update total price calculation based on the number of trees
+        function calculateTotal() {
+        const numTrees = document.getElementById('numTrees').value;
+        const pricePerTree = 10; // Set your price per tree
+        const totalPrice = numTrees * pricePerTree;
+        document.getElementById('totalPrice').innerText = `Total Price: $${totalPrice}`;
+    }
+
 </script>
 </body>
 </html>

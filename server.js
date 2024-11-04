@@ -19,14 +19,16 @@ db.connect((err) => {
     console.log('MySQL Connected...');
 });
 
-// Route to capture tree orders from the map
+// Route to capture bulk tree orders from the map
 app.post('/submitOrder', (req, res) => {
-    const { address, num_trees } = req.body;
+    const { treeOrders } = req.body; // Expects an array of tree order objects
 
-    const query = `INSERT INTO tree_orders (address, num_trees) VALUES (?, ?)`;
-    db.query(query, [address, num_trees], (err, result) => {
+    const query = `INSERT INTO tree_orders (address, num_trees) VALUES ?`;
+    const values = treeOrders.map(order => [order.address, order.num_trees]);
+
+    db.query(query, [values], (err, result) => {
         if (err) throw err;
-        res.send({ order_id: result.insertId });
+        res.send({ success: true, order_ids: result.insertId });
     });
 });
 
@@ -39,6 +41,28 @@ app.post('/submitPayment', (req, res) => {
     db.query(query, [cardholder_name, card_number, expiry_date, cvv, email, total_price, order_id], (err, result) => {
         if (err) throw err;
         res.send({ success: true, payment_id: result.insertId });
+    });
+});
+
+// New endpoint to handle donations and store the number of trees
+app.post('/api/donate', (req, res) => {
+    const { trees } = req.body;
+
+    const query = `INSERT INTO donations (trees) VALUES (?)`;
+    db.query(query, [trees], (err, result) => {
+        if (err) throw err;
+        res.json({ message: 'Donation recorded successfully', donation_id: result.insertId });
+    });
+});
+
+// New endpoint to get the latest donation (could be used on pay.html)
+app.get('/api/latest-donation', (req, res) => {
+    const query = `SELECT * FROM donations ORDER BY id DESC LIMIT 1`;
+
+    db.query(query, (err, results) => {
+        if (err) throw err;
+        const latestDonation = results[0]; // Get the latest donation
+        res.json(latestDonation || { trees: 0 });
     });
 });
 

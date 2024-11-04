@@ -11,16 +11,13 @@
         let autocomplete;
         let markers = []; // Array to store tree markers and addresses
 
-        // Function to load the Google Maps JavaScript API asynchronously
         function loadGoogleMapsAPI() {
             const script = document.createElement('script');
             script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places,marker&v=beta';
             script.async = true;
-            script.defer = true; // Ensure the script executes after the document is parsed
+            script.defer = true;
 
-            // When the script loads, initialize the map
             script.onload = initMap;
-
             document.head.appendChild(script);
         }
 
@@ -29,13 +26,11 @@
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 10,
                 center: initialLatLng,
-                mapId: "b047284208cd25e3", // Set your Map ID here
+                mapId: "b047284208cd25e3",
             });
 
-            // Initialize the autocomplete functionality
             initAutocomplete();
 
-            // Add a click listener to add tree markers
             map.addListener("click", (event) => {
                 geocodeLatLng(event.latLng);
             });
@@ -44,14 +39,12 @@
         function initAutocomplete() {
             const addressField = document.querySelector("#ship-address");
 
-            // Create the autocomplete object
             autocomplete = new google.maps.places.Autocomplete(addressField, {
                 componentRestrictions: { country: ["us", "ca"] },
                 fields: ["address_components", "geometry"],
                 types: ["address"],
             });
 
-            // When the user selects an address from the drop-down, populate the address fields
             autocomplete.addListener("place_changed", fillInAddress);
         }
 
@@ -64,8 +57,7 @@
 
             const location = place.geometry.location;
 
-            // Add a tree marker at the selected address using AdvancedMarkerElement
-            geocodeLatLng(location); // Check if the location is suitable before adding the marker
+            geocodeLatLng(location);
 
             map.setCenter(location);
             map.setZoom(15);
@@ -76,10 +68,10 @@
             geocoder.geocode({ location: latLng }, (results, status) => {
                 if (status === "OK" && results[0]) {
                     const address = results[0].formatted_address;
-                    const locationTypes = results[0].types; // Get all location types (e.g., "locality", "park")
+                    const locationTypes = results[0].types;
 
                     if (isGreenArea(locationTypes)) {
-                        addTreeMarker(latLng, address);  // Add marker only if in a green zone
+                        addTreeMarker(latLng, address);
                     } else {
                         alert("Tree planting is restricted in this area. Please plant trees in designated green zones like parks.");
                     }
@@ -90,10 +82,7 @@
         }
 
         function isGreenArea(locationTypes) {
-            // Define allowed location types where planting trees is encouraged
             const allowedTypes = ["park", "natural_feature"];
-
-            // Check if any of the location types match allowed types
             return locationTypes.some(type => allowedTypes.includes(type));
         }
 
@@ -146,13 +135,11 @@
                 addressList.appendChild(listItem);
             });
 
-            // Set URL parameter to include number of trees
             const treeCount = markers.length;
             donateButton.href = `pay.html?trees=${treeCount}`;
             donateButton.style.display = treeCount > 0 ? 'block' : 'none';
         }
 
-        // Load Google Maps API after the document is fully loaded
         window.onload = loadGoogleMapsAPI;
     </script>
     <style>
@@ -280,10 +267,99 @@
     <ul id="address-list"></ul>
     <a href="pay.html" id="donate-trees-button" class="donate-button">Donate Trees</a>
 </div>
+<button id="submit-order-button" style="display:none;">Submit Tree Order</button>
 
 <footer>
     <p>&copy; 2023 Tree Planting Project. All rights reserved.</p>
 </footer>
+
+<script>
+    function updateAddressList() {
+        const addressList = document.getElementById('address-list');
+        const submitOrderButton = document.getElementById('submit-order-button');
+        addressList.innerHTML = '';
+
+        markers.forEach(({ marker, address }, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = address;
+
+            const viewButton = document.createElement('button');
+            viewButton.textContent = 'View';
+            viewButton.classList.add('view-btn');
+
+            viewButton.addEventListener('click', () => {
+                const lat = marker.position.lat();
+                const lng = marker.position.lng();
+                window.location.href = `index.html?lat=${lat}&lng=${lng}`;
+            });
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.classList.add('remove-btn');
+
+            removeButton.addEventListener('click', () => {
+                marker.map = null;
+                markers.splice(index, 1);
+                updateAddressList();
+            });
+
+            listItem.appendChild(viewButton);
+            listItem.appendChild(removeButton);
+            addressList.appendChild(listItem);
+        });
+
+        const treeCount = markers.length;
+        submitOrderButton.style.display = treeCount > 0 ? 'block' : 'none';
+    }
+
+    function handleSubmitOrder() {
+        const treeAddresses = markers.map(({ address }) => address);
+        const treeData = JSON.stringify(treeAddresses);
+
+        fetch('YOUR_SERVER_ENDPOINT', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ trees: treeData }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Order submitted successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error submitting order:', error);
+            });
+    }
+
+    document.getElementById('submit-order-button').addEventListener('click', handleSubmitOrder);
+
+    function handleDonate() {
+        const numTrees = document.getElementById('numTreesInput').value; // Get the number of trees from an input field
+
+        fetch('http://localhost:3000/api/donate', { // Your server endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ trees: numTrees }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Donation successful:', data);
+                window.location.href = 'pay.html'; // Redirect to the payment page
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+</script>
 
 </body>
 </html>
