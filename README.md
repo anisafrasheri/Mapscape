@@ -23,8 +23,7 @@ The goal is to make tree planting a more personal, interactive, and informed dec
 
    - We used location data to store user-suggested tree planting sites in a database.
 
-3. **Backend (Python):**
-   - Python was utilized to handle user inputs, donations, and suggested tree planting locations.
+3. **Backend:**
    - We created endpoints to manage donations, user data, and interaction with the Google Maps API.
    - Using MySQL to store the data.
 
