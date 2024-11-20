@@ -113,11 +113,19 @@
                 const viewButton = document.createElement('button');
                 viewButton.textContent = 'View';
                 viewButton.classList.add('view-btn');
+
                 viewButton.addEventListener('click', () => {
+                    // Assuming 'marker' is an object with position that has lat() and lng() methods.
                     const lat = marker.position.lat();
                     const lng = marker.position.lng();
-                    window.location.href = `index.html?lat=${lat}&lng=${lng}`;
+
+                    // Construct the URL with query parameters
+                    const url = `index.html?lat=${lat}&lng=${lng}`;
+
+                    // Redirect to the constructed URL
+                    window.location.href = url;
                 });
+
 
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Remove';

@@ -46,41 +46,17 @@
                 position: {lat: 37.76, lng: -121.63, altitude: 0},
                 orientation: {tilt: 270},
             },
-            // Scaled down model.
-            {
-                position: {lat: 37.75, lng: -121.63, altitude: 0},
-                orientation: {tilt: 270},
-                scale: 0.8,
-            },
-            // Scaled up model.
-            {
-                position: {lat: 37.735, lng: -121.63, altitude: 0},
-                orientation: {tilt: 270},
-                scale: 1.2,
-            },
-            // A model with an additional transformation applied.
-            {
-                position: {lat: 37.72, lng: -121.63, altitude: 0},
-                orientation: {tilt: 270, roll: 90},
-            },
-            // Non-clamped to the ground model.
-            {
-                position: {lat: 37.71, lng: -121.63, altitude: 1000},
-                altitudeMode: 'RELATIVE_TO_GROUND',
-                orientation: {tilt: 270},
-            },
+
         ];
 
         for (const {position, altitudeMode, orientation, scale} of models) {
             const model = new Model3DElement({
-                src: "./img/Tree.glb",
-                //src: 'img/Tree.glb',
+                src: './img/model.glb', // Insert the valid Sketchfab 3D model URL here
                 position,
                 altitudeMode,
                 orientation,
                 scale,
             });
-
             map.append(model);
         }
     }
