@@ -103,7 +103,7 @@
 
         function updateAddressList() {
             const addressList = document.getElementById('address-list');
-            const donateButton = document.getElementById('donate-trees-button');
+            const submitOrderButton = document.getElementById('submit-order-button');
             addressList.innerHTML = '';
 
             markers.forEach(({ marker, address }, index) => {
@@ -113,7 +113,6 @@
                 const viewButton = document.createElement('button');
                 viewButton.textContent = 'View';
                 viewButton.classList.add('view-btn');
-
                 viewButton.addEventListener('click', () => {
                     const lat = marker.position.lat();
                     const lng = marker.position.lng();
@@ -123,7 +122,6 @@
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Remove';
                 removeButton.classList.add('remove-btn');
-
                 removeButton.addEventListener('click', () => {
                     marker.map = null;
                     markers.splice(index, 1);
@@ -136,8 +134,26 @@
             });
 
             const treeCount = markers.length;
-            donateButton.href = `pay.html?trees=${treeCount}`;
-            donateButton.style.display = treeCount > 0 ? 'block' : 'none';
+            submitOrderButton.style.display = treeCount > 0 ? 'block' : 'none';
+        }
+
+        function handleSubmitOrder() {
+            const treeAddresses = markers.map(({ address }) => address);
+            const treeData = JSON.stringify(treeAddresses);
+
+            fetch('YOUR_SERVER_ENDPOINT', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trees: treeData }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Order submitted successfully:', data);
+                    window.location.href = 'pay.html'; // Redirect to payment page after order submission
+                })
+                .catch(error => {
+                    console.error('Error submitting order:', error);
+                });
         }
 
         window.onload = loadGoogleMapsAPI;
@@ -219,6 +235,19 @@
             width: 100%;
         }
 
+        .submit-order-button {
+            display: none;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
         form {
             display: flex;
             align-items: center;
@@ -251,7 +280,6 @@
         <li><a href="aboutus.html">About Us</a></li>
         <li><a href="contact.html">Contact Us</a></li>
         <li class="shopping-bag"><a href="pay.html">🛒</a></li>
-        <li><a href="#">Sign In</a></li>
     </ul>
 </nav>
 
@@ -266,100 +294,11 @@
     <h2>Tree Planting Locations</h2>
     <ul id="address-list"></ul>
     <a href="pay.html" id="donate-trees-button" class="donate-button">Donate Trees</a>
+    <button id="submit-order-button" class="submit-order-button"><a href="pay.html" >Submit Tree Order</a></button>
 </div>
-<button id="submit-order-button" style="display:none;">Submit Tree Order</button>
-
-<footer>
-    <p>&copy; 2023 Tree Planting Project. All rights reserved.</p>
-</footer>
 
 <script>
-    function updateAddressList() {
-        const addressList = document.getElementById('address-list');
-        const submitOrderButton = document.getElementById('submit-order-button');
-        addressList.innerHTML = '';
-
-        markers.forEach(({ marker, address }, index) => {
-            const listItem = document.createElement('li');
-            listItem.textContent = address;
-
-            const viewButton = document.createElement('button');
-            viewButton.textContent = 'View';
-            viewButton.classList.add('view-btn');
-
-            viewButton.addEventListener('click', () => {
-                const lat = marker.position.lat();
-                const lng = marker.position.lng();
-                window.location.href = `index.html?lat=${lat}&lng=${lng}`;
-            });
-
-            const removeButton = document.createElement('button');
-            removeButton.textContent = 'Remove';
-            removeButton.classList.add('remove-btn');
-
-            removeButton.addEventListener('click', () => {
-                marker.map = null;
-                markers.splice(index, 1);
-                updateAddressList();
-            });
-
-            listItem.appendChild(viewButton);
-            listItem.appendChild(removeButton);
-            addressList.appendChild(listItem);
-        });
-
-        const treeCount = markers.length;
-        submitOrderButton.style.display = treeCount > 0 ? 'block' : 'none';
-    }
-
-    function handleSubmitOrder() {
-        const treeAddresses = markers.map(({ address }) => address);
-        const treeData = JSON.stringify(treeAddresses);
-
-        fetch('YOUR_SERVER_ENDPOINT', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ trees: treeData }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Order submitted successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error submitting order:', error);
-            });
-    }
-
     document.getElementById('submit-order-button').addEventListener('click', handleSubmitOrder);
-
-    function handleDonate() {
-        const numTrees = document.getElementById('numTreesInput').value; // Get the number of trees from an input field
-
-        fetch('http://localhost:3000/api/donate', { // Your server endpoint
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ trees: numTrees }),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Donation successful:', data);
-                window.location.href = 'pay.html'; // Redirect to the payment page
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-
 </script>
-
 </body>
 </html>
