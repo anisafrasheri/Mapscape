@@ -1,136 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Tree Map</title>
+    <title>Photorealistic 3D Maps in Maps JavaScript models</title>
     <style>
-        html, body {
-            height: 100%;
+        html,
+        body {
+            height:100%;
             margin: 0;
             padding: 0;
         }
 
-        #map {
-            height: 100vh;
+        gmp-map-3d {
+            height: 100%;
             width: 100%;
         }
     </style>
 </head>
-
 <body>
-<div id="map"></div>
-
 <script>
-    // Ensure the API key is correctly loaded
-    async function loadMapsLibrary() {
-        await google.maps.importLibrary("maps3d");
-        initMap();
-    }
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: "AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o",
+        v: "alpha",
+        // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+        // Add other bootstrap parameters as needed, using camel case.
+    });
+</script>
+<script type="text/javascript">
+    // Maps JS API is loaded using Dynamic Library import https://developers.google.com/maps/documentation/javascript/load-maps-js-api#dynamic-library-import
 
-    async function initMap() {
-        // Get the coordinates from the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const lat = parseFloat(urlParams.get('lat'));
-        const lng = parseFloat(urlParams.get('lng'));
-        const address = urlParams.get('address');
+    async function init() {
+        const { Map3DElement, Model3DElement } = await google.maps.importLibrary("maps3d");
 
-        const mapOptions = {
-            zoom: 10,
-            center: { lat: lat || -33.9, lng: lng || 151.2 }, // Default if no params
-        };
-
-        const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-        if (!isNaN(lat) && !isNaN(lng)) {
-            // Add a marker to the map if coordinates are provided
-            const marker = new google.maps.Marker({
-                position: { lat: lat, lng: lng },
-                map: map,
-                title: "Selected Location",
-            });
-
-            // Optionally zoom in to the marker
-            map.setZoom(15);
-        } else if (address) {
-            // If address is provided, geocode it
-            const geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ 'address': address }, function (results, status) {
-                if (status === 'OK') {
-                    const location = results[0].geometry.location;
-                    init3DTree(location.lat(), location.lng(), map);
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
-
-        // Load 3D tree after map is initialized
-        await loadMapsLibrary();
-    }
-
-    function init3DTree(lat, lng, map) {
-        const { Map3DElement, Polygon3DElement } = google.maps.maps3d;
-
-        const map3DElement = new Map3DElement({
-            center: { lat: lat, lng: lng, altitude: 400 },
-            range: 1000,
-            tilt: 60,
+        const map = new Map3DElement({
+            center: {lat: 37.7438, lng: -121.5088, altitude: 1800},
+            heading: -90,
+            tilt: 90,
+            defaultLabelsDisabled: true,
         });
 
-        map3DElement.defaultLabelsDisabled = true;
+        document.body.append(map);
 
-        const treeTrunkOptions = {
-            strokeColor: "#8B4513", // Brown for the trunk
-            strokeWidth: 2,
-            strokeOpacity: 1,
-            fillColor: "#8B4513",
-            fillOpacity: 1,
-            altitudeMode: "ABSOLUTE",
-            extruded: true,
-        };
-
-        const treeLeafOptions = {
-            strokeColor: "#228B22", // Green for the leaves
-            strokeWidth: 2,
-            strokeOpacity: 1,
-            fillColor: "#228B22",
-            fillOpacity: 0.8,
-            altitudeMode: "ABSOLUTE",
-            extruded: true,
-        };
-
-        const treeTrunk = new Polygon3DElement(treeTrunkOptions);
-        treeTrunk.outerCoordinates = [
-            { lat: lat, lng: lng, altitude: 400 },
-            { lat: lat + 0.00002, lng: lng + 0.00002, altitude: 400 },
-            { lat: lat + 0.00002, lng: lng + 0.00002, altitude: 450 },
-            { lat: lat, lng: lng, altitude: 450 }
+        const models = [
+            // A model with regular settings.
+            {
+                position: {lat: 37.76, lng: -121.63, altitude: 0},
+                orientation: {tilt: 270},
+            },
+            // Scaled down model.
+            {
+                position: {lat: 37.75, lng: -121.63, altitude: 0},
+                orientation: {tilt: 270},
+                scale: 0.8,
+            },
+            // Scaled up model.
+            {
+                position: {lat: 37.735, lng: -121.63, altitude: 0},
+                orientation: {tilt: 270},
+                scale: 1.2,
+            },
+            // A model with an additional transformation applied.
+            {
+                position: {lat: 37.72, lng: -121.63, altitude: 0},
+                orientation: {tilt: 270, roll: 90},
+            },
+            // Non-clamped to the ground model.
+            {
+                position: {lat: 37.71, lng: -121.63, altitude: 1000},
+                altitudeMode: 'RELATIVE_TO_GROUND',
+                orientation: {tilt: 270},
+            },
         ];
 
-        const treeLeaves = new Polygon3DElement(treeLeafOptions);
-        treeLeaves.outerCoordinates = [
-            { lat: lat, lng: lng, altitude: 450 },
-            { lat: lat + 0.00005, lng: lng + 0.00005, altitude: 500 },
-            { lat: lat - 0.00005, lng: lng - 0.00005, altitude: 500 },
-            { lat: lat, lng: lng, altitude: 450 }
-        ];
+        for (const {position, altitudeMode, orientation, scale} of models) {
+            const model = new Model3DElement({
+                src: "./img/Tree.glb",
+                //src: 'img/Tree.glb',
+                position,
+                altitudeMode,
+                orientation,
+                scale,
+            });
 
-        map3DElement.append(treeTrunk);
-        map3DElement.append(treeLeaves);
-        document.body.append(map3DElement);
+            map.append(model);
+        }
     }
 
-    // Load the Google Maps API
-    const script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdOFcGdrhJ-kkaPEcIwinbDE2c2vO-9o&libraries=places,maps3d";
-    script.async = true;
-    script.defer = true;
-    script.onload = loadMapsLibrary;
-    document.head.appendChild(script);
+    init();
 
 </script>
-
 </body>
 </html>
